@@ -1,4 +1,4 @@
-package com.ap.fietskorier;
+package com.ap.fietskorier; //WAS MAINACTIVITY
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,7 +32,7 @@ import static com.ap.fietskorier.Constants.ERROR_DIALOG_REQUEST;
 import static com.ap.fietskorier.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.ap.fietskorier.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class MainActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
     EditText EmailID,Password;
     Button Btn_SignUp;
     TextView tvSignIn;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_signup);
         mFirebaseAuth = FirebaseAuth.getInstance();
         EmailID = findViewById(R.id.Email_signUp);
         Password =findViewById(R.id.Password_signUp);
@@ -71,21 +71,21 @@ public class MainActivity extends AppCompatActivity {
                     Password.requestFocus();
                 }else  if (email.isEmpty()&&pwd.isEmpty())
                 {
-                    Toast.makeText(MainActivity.this,"Fields are empty!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this,"Fields are empty!",Toast.LENGTH_LONG).show();
                 }else  if (!(email.isEmpty()&&pwd.isEmpty()) )
                 {
                     //create new user
-                    mFirebaseAuth.createUserWithEmailAndPassword(email,pwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    mFirebaseAuth.createUserWithEmailAndPassword(email,pwd).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if ( !task.isSuccessful()){
                                 //
-                                Toast.makeText(MainActivity.this, "SignUp Unsuccessful, Please try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignupActivity.this, "SignUp Unsuccessful, Please try again", Toast.LENGTH_SHORT).show();
                             }else{
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
                                 sendEmailVerification();
-                                Intent i = new Intent(MainActivity.this,HomeActivity.class);
+                                Intent i = new Intent(SignupActivity.this,HomeActivity.class);
                                 if (mLocationPermissionGranted) {
                                     startActivity(i);
                                 }else{
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 }else{
-                    Toast.makeText( MainActivity.this   ,"Error Occurd!",Toast.LENGTH_LONG).show();
+                    Toast.makeText( SignupActivity.this   ,"Error Occurd!",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,LoginActivity.class);
+                Intent i = new Intent(SignupActivity.this,LoginActivity.class);
 
                 startActivity(i);
 
@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
                         // [START_EXCLUDE]
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this,
+                            Toast.makeText(SignupActivity.this,
                                     "Verification email sent to " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(MainActivity.this,
+                            Toast.makeText(SignupActivity.this,
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -141,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  boolean isServicesOk(){
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(SignupActivity.this);
         if (available==ConnectionResult.SUCCESS){
             // services is available
             return true;
         }else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            Dialog  dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this,available,ERROR_DIALOG_REQUEST);
+            Dialog  dialog = GoogleApiAvailability.getInstance().getErrorDialog(SignupActivity.this,available,ERROR_DIALOG_REQUEST);
             dialog.show();
 
         }else{
@@ -218,7 +218,7 @@ private void init(){
     public boolean isServicesOK(){
         Log.d(TAG, "isServicesOK: checking google services version");
 
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(SignupActivity.this);
 
         if(available == ConnectionResult.SUCCESS){
             //everything is fine and the user can make map requests
@@ -228,7 +228,7 @@ private void init(){
         else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
             //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(SignupActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
