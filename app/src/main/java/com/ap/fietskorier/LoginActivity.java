@@ -17,6 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.ap.fietskorier.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +31,10 @@ public class LoginActivity extends AppCompatActivity {
     Button Btn_singIn;
     TextView tvSignUp;
     FirebaseAuth mFirebaseAuth;
+
+
+
+
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
@@ -38,31 +49,30 @@ public class LoginActivity extends AppCompatActivity {
         Btn_singIn = findViewById(R.id.button_signIn);
         tvSignUp = findViewById(R.id.no_account_signUp);
 
-
-
-
-
-
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
-
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
                 if(mFirebaseUser!=null){
-                        Toast.makeText(LoginActivity.this ,"You are logged in", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(LoginActivity.this,HomeActivity.class );
-                        startActivity(i);
-                }else{Toast.makeText(LoginActivity.this,"Please Login",Toast.LENGTH_SHORT);
+
+                    Toast.makeText(LoginActivity.this ,"You are logged in", Toast.LENGTH_SHORT).show();
+
+
+                    Intent i = new Intent(LoginActivity.this,HomeActivity.class );
+
+
+
+
+                    startActivity(i);
+                 }else{Toast.makeText(LoginActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
                 }
             }
         };
         Btn_singIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                     String email = EmailID.getText().toString();
                     String pwd = Password.getText().toString();
                     if (email.isEmpty())
@@ -87,6 +97,17 @@ public class LoginActivity extends AppCompatActivity {
                                 }else{
                                     if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
                                     Intent intToHome = new Intent(LoginActivity.this,HomeActivity.class);
+
+
+                                        //Create a User in the DataBase
+                                        String UID = mFirebaseAuth.getCurrentUser().getUid() ;
+                                        DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS).document(UID);
+                                        String Email = mFirebaseAuth.getCurrentUser().getEmail();
+                                        Map<String,Object> dataToSave = new HashMap<>();
+                                        //dataToSave.put("UID",UID);
+                                        dataToSave.put("Email",Email);
+
+                                        mDocRef.set(dataToSave);
 
                                         startActivity(intToHome);}else{
                                         Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();

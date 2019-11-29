@@ -35,9 +35,9 @@ public class add_package extends AppCompatActivity {
 
 
     public void saveFirestore(View view) {
-        editText =  (EditText) findViewById(R.id.edit_text);
+        editText =   findViewById(R.id.edit_text);
         String text = editText.getText().toString();
-        Map<String,Object> dataToSave = new HashMap<String,Object>();
+        Map<String,Object> dataToSave = new HashMap<>();
         dataToSave.put("Quote",text);
         mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
