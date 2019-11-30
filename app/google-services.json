@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "821226883486-dcunaeve3vij4kdlljnrt2cjls32vvpe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ap.fietskorier",
+            "certificate_hash": "8bfbb7711a2be1d9a7d2b7da18cf456e76a73b4e"
+          }
+        },
+        {
           "client_id": "821226883486-ljhfavjf97oqfs913uvv8mmbebvqmtf7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
