@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">fietskoerier</string>
+    <string name="app_name">Packaged</string>
+    <string name="title_activity_shipment">Shipments</string>
+    <string name="title_activity_delivery">Deliveries</string>
+    <string name="title_activity_my_profile">My profile</string>
+
 </resources>
