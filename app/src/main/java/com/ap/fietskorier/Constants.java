@@ -9,7 +9,7 @@ public class Constants {
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public static  final  int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+     public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String USERS = "users";
     public static final String PACKAGES = "packages";
 }
