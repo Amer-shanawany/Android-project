@@ -40,6 +40,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.libraries.places:places:2.1.0'
 
+
     implementation 'com.google.firebase:firebase-firestore:21.3.0'
 
 

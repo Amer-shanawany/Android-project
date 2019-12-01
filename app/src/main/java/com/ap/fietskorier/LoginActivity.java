@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ap.fietskorier.Constants.USERS;
+import static com.ap.fietskorier.Constants.USERS_COLLECTION;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     Button Btn_singIn;
     TextView tvSignUp;
     FirebaseAuth mFirebaseAuth;
-
+    public User user;
 
 
 
@@ -100,11 +100,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                         //Create a User in the DataBase
+
                                         String UID = mFirebaseAuth.getCurrentUser().getUid() ;
-                                        DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS).document(UID);
+
+                                        DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(UID);
                                         String Email = mFirebaseAuth.getCurrentUser().getEmail();
+                                        user = new User(UID,"Unknown",Email);
                                         Map<String,Object> dataToSave = new HashMap<>();
-                                        //dataToSave.put("UID",UID);
+                                        dataToSave.put("UID",UID);
                                         dataToSave.put("Email",Email);
 
                                         mDocRef.set(dataToSave);

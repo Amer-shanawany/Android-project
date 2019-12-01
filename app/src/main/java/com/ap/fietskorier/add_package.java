@@ -21,7 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,11 +35,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,14 +68,26 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     FirebaseFirestore database;
     private static final float DEFAULT_ZOOM = 15f;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-
+    private Place source_Place;
+    private Place destination_Place;
     //widgets
-    private EditText package_address_search;
+    Button save_info_btn;
     private ImageView mGps;
     EditText editText;
 
-    Button button;
-    private String TAG = "Add Package";
+    public static final String SOURCE_ID ="Source ID";
+    public static final String SOURCE_NAME="Source Name";
+    public static final String SOURCE_ADDRESS="Source Address";
+    public static final String SOURCE_LATLNG="Source LatLng";
+    public static final String DESTINATION_ID="Destination ID";
+    public static final String DESTINATION_NAME="Destination Name";
+    public static final String DESTINATION_ADDRESS="Destination Address";
+    public static final String DESTINATION_LATLNG="Destination LatLng";
+    public static final String SOURCE_GEO = "Source GeoPoint";
+    public static final String DESTINATION_GEO = "Destination GeoPoint";
+    private GeoPoint geoSource;
+    private GeoPoint geoDestination;
+     private String TAG = "ADD_PACKAGE";
 
      private DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("users").document("Amer");
     @Override
@@ -71,43 +95,98 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_package);
 
-        package_address_search = findViewById(R.id.Source_Address_search);
+        save_info_btn = findViewById(R.id.save_Package_info);
+        //Device Location
         mGps =   findViewById(R.id.ic_gps);
         getLocationPermission();
+        save_info_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveFirestore(v);
+            }
+        });
+
+        /**
+         * Initialize Places. For simplicity, the API key is hard-coded. In a production
+         * environment we recommend using a secure mechanism to manage API keys.
+         */
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyA82ZnHt02qAGgujAnXNisNFpbA_TIS6CQ");
+        }
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragmentsSource = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.source_autocomplete_fragment);
+        AutocompleteSupportFragment autocompleteFragmentsDestination = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.destination_autocomplete_fragment);
+        //Restrict and ask for specific fields
+        if (autocompleteFragmentsSource != null) {
+            autocompleteFragmentsSource.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG
+            ,Place.Field.ADDRESS));
+        }
+        if (autocompleteFragmentsDestination != null) {
+            autocompleteFragmentsDestination.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG
+                    ,Place.Field.ADDRESS));
+        }
+
+        autocompleteFragmentsSource.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", " + place.getAddress() + ", " + place.getLatLng());
+                source_Place = place;
+                geoSource = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+        autocompleteFragmentsDestination.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", " + place.getAddress() + ", " + place.getLatLng());
+                destination_Place = place;
+                geoDestination = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
 
      }
 
 
-
-    private void init(){
-        Log.d(TAG, "init: initializing");
-
-        package_address_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                || actionId == EditorInfo.IME_ACTION_DONE
-                || event.getAction() == KeyEvent.ACTION_DOWN
-                || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    //excute sarching methods
-                    geoLocate();
-
-                }
-
-                return false;
-            }
-        });
-
-        mGps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked gps icon");
-                getDeviceLocation();
-            }
-        });
-
-        hideSoftKeyboard();
-    }
+//
+//    private void init(){
+//        Log.d(TAG, "init: initializing");
+//
+//        source.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if(actionId == EditorInfo.IME_ACTION_SEARCH
+//                || actionId == EditorInfo.IME_ACTION_DONE
+//                || event.getAction() == KeyEvent.ACTION_DOWN
+//                || event.getAction() == KeyEvent.KEYCODE_ENTER){
+//                    //excute sarching methods
+//                    geoLocate();
+//
+//                }
+//
+//                return false;
+//            }
+//        });
+//
+//    }
 
 
     private void getDeviceLocation(){
@@ -145,7 +224,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     private void geoLocate(){
         Log.d(TAG, "geoLocate: geolocating");
 
-        String searchString = package_address_search.getText().toString();
+        String searchString = source_Place.getAddress();
 
         Geocoder geocoder = new Geocoder(add_package.this);
         List<Address> list = new ArrayList<>();
@@ -184,21 +263,37 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
 
     //save to the Database
     public void saveFirestore(View view) {
-        editText =   findViewById(R.id.Source_Address_search);
-        String text = editText.getText().toString();
-        Map<String,Object> dataToSave = new HashMap<>();
-        dataToSave.put("Quote",text);
-        mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Document has been saved! ");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Document was not saved!",e);
-            }
-        });
+
+        if(source_Place!=null && destination_Place!=null) {
+            Map<String, Object> dataToSave = new HashMap<>();
+
+            dataToSave.put(SOURCE_ID ,        source_Place.getId());
+            dataToSave.put(SOURCE_NAME,       source_Place.getName());
+            dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
+            dataToSave.put(SOURCE_GEO, geoSource);
+            dataToSave.put(SOURCE_LATLNG,     source_Place.getLatLng());
+
+            dataToSave.put(DESTINATION_ID ,       destination_Place.getId());
+            dataToSave.put(DESTINATION_NAME,      destination_Place.getName());
+            dataToSave.put(DESTINATION_ADDRESS,   destination_Place.getAddress());
+            dataToSave.put(DESTINATION_GEO,geoDestination);
+            dataToSave.put(DESTINATION_LATLNG,    destination_Place.getLatLng());
+
+            mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Document has been saved! ");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Document was not saved!", e);
+                }
+            });
+        }else{
+            Toast.makeText(this,"please provide all the required info",Toast.LENGTH_LONG).show();
+
+        }
     }
 
 
@@ -278,7 +373,16 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            init();
+
+            mGps.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: clicked gps icon");
+                    getDeviceLocation();
+                }
+            });
+
+            hideSoftKeyboard();
         }
     }
 }
