@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:id="@+id/action_shipment"
+    android:title="Shipments"
+    app:showAsAction="never">
+</item>
+<item android:id="@+id/action_delivery"
+    android:title="Deliveries"
+    app:showAsAction="never">
+</item>
+<item android:id="@+id/action_profile"
+    android:title="My profile"
+    app:showAsAction="never">
+</item>
+<item android:id="@+id/action_logout"
+    android:title="Logout"
+    app:showAsAction="never">
+</item>
+
+</menu>

@@ -1,6 +1,7 @@
 package com.ap.fietskorier;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,9 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     Button Btn_singIn;
     TextView tvSignUp;
     FirebaseAuth mFirebaseAuth;
-    public User user;
+public User user;
 
 
+Button Btn_fastSingIn;
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -48,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         Password =findViewById(R.id.Password_singIn);
         Btn_singIn = findViewById(R.id.button_signIn);
         tvSignUp = findViewById(R.id.no_account_signUp);
+        Btn_fastSingIn = findViewById(R.id.button_fastlogin);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
 
@@ -135,8 +141,44 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        }
+        Btn_fastSingIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //EmailID.setText("jonas.baert@icloud.com");
+                //Password.setText("123456");
+                String email = "s109802@ap.be";
+                String pwd = "123456";
+                mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(!task.isSuccessful()){
+                                Toast.makeText(LoginActivity.this,"Login Error, Please login again", Toast.LENGTH_SHORT).show();
+                            }else{
+                                if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
+                                    Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
 
 
+                                    //Create a User in the DataBase
+                                    String UID = mFirebaseAuth.getCurrentUser().getUid() ;
+                                    DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS).document(UID);
+                                    String Email = mFirebaseAuth.getCurrentUser().getEmail();
+                                    Map<String,Object> dataToSave = new HashMap<>();
+                                    //dataToSave.put("UID",UID);
+                                    dataToSave.put("Email",Email);
+
+                                    mDocRef.set(dataToSave);
+
+                                    startActivity(intToHome);}else{
+                                    Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                        }
+                    });
+
+            }
+        });
+
+    }
 
 }
