@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     Button Btn_singIn;
     TextView tvSignUp;
     FirebaseAuth mFirebaseAuth;
-public User user;
+    public User user;
 
 
 Button Btn_fastSingIn;
@@ -160,7 +160,7 @@ Button Btn_fastSingIn;
 
                                     //Create a User in the DataBase
                                     String UID = mFirebaseAuth.getCurrentUser().getUid() ;
-                                    DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS).document(UID);
+                                    DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(UID);
                                     String Email = mFirebaseAuth.getCurrentUser().getEmail();
                                     Map<String,Object> dataToSave = new HashMap<>();
                                     //dataToSave.put("UID",UID);
