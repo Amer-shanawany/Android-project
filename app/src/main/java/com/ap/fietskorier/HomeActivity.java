@@ -28,8 +28,8 @@ public class HomeActivity extends AppCompatActivity {
     Button btnLogout;
     Button btnPickUpPackage;
     Button btnAddPackage;
-    FirebaseAuth mFirebaseAuth;
-    FirebaseUser user  ;
+    //FirebaseAuth mFirebaseAuth;
+    //FirebaseUser user  ;
     String uid ;//unique UserID after verification
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private boolean mLocationPermissionGranted = false;
@@ -41,10 +41,21 @@ public class HomeActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btn_logOut);
         btnPickUpPackage = findViewById(R.id.btn_pickUp);
         btnAddPackage = findViewById(R.id.btn_add_package);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        //user this line to get the current user information
+        User user = ((UserClient)(getApplicationContext())).getUser();
+
+        // no need to instantiate FirebaseAuthentication method
+        //in order to check if the user is Signed in
+        //user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Log.i(TAG, "user ID: "+user.getUser_id()
+        +" User email address: "  + user.getEmail()
+        +" User name: " +user.getUsername());
         checkMapServices();
-        if(user.getUid()!=null){
-        uid = user.getUid();
+        if(user.getUser_id()!=null){
+        uid = user.getUser_id();
         }else{
             Toast.makeText(this,"User is null",Toast.LENGTH_LONG).show();
         }

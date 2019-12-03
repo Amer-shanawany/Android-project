@@ -53,7 +53,14 @@ dependencies {
     //implementation 'com.squareup.okhttp3:okhttp'
     //implementation 'com.google.code.gson:gson'
     //implementation 'org.slf4j:slf4j-api'
+    //QR scanner / Generator https://www.logicchip.com/qr-code-reader-generator-android/
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    //QR Generator //https://www.c-sharpcorner.com/article/how-to-generate-qr-code-in-android/
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@arr'
 
 
 

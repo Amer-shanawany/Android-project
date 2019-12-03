@@ -22,11 +22,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     public User user;
 
     private static String TAG = "LoginActivity";
-
+    private @ServerTimestamp Date   timeStamp;
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
@@ -65,7 +69,18 @@ public class LoginActivity extends AppCompatActivity {
                 if(mFirebaseUser!=null){
 
                     Toast.makeText(LoginActivity.this ,"You are logged in", Toast.LENGTH_SHORT).show();
+                    //Make a user
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    //FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                           // .setTimestampsInSnapshotsEnabled(true).build();
+                    DocumentReference userRef = db.collection(USERS_COLLECTION)
+                            .document(mFirebaseUser.getUid());
+                    userRef.get().addOnCompleteListener((task )-> {
+                        if (task.isSuccessful()){
+                            Log.d(TAG, "onCompletet : successfully set the user Client. ");
 
+                        }
+                    });
 
                     Intent i = new Intent(LoginActivity.this,HomeActivity.class );
 
@@ -106,16 +121,30 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intToHome = new Intent(LoginActivity.this,HomeActivity.class);
 
 
+                                        User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());
+                                        ((UserClient)(getApplicationContext())).setUser(user);
+                                        /**
+                                         * in any activity you can retreive the user by using
+                                         *User user = ((UserClient)(getApplicationContext())).getUser();                             *
+                                         * */
                                         //Create a User in the DataBase
 
-                                        String UID = mFirebaseAuth.getCurrentUser().getUid() ;
+                                        //String UID = mFirebaseAuth.getCurrentUser().getUid() ;
 
-                                        DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(UID);
-                                        String Email = mFirebaseAuth.getCurrentUser().getEmail();
-                                        user = new User(UID,"Unknown",Email);
+                                        DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(user.getUser_id());
+                                        //String Email = mFirebaseAuth.getCurrentUser().getEmail();
+                                        //user = new User(UID,"Unknown",Email)
+                                        /**
+                                         * TODO: 1 DELETE Unnecessary OnAuthenticationChange Override Method
+                                         * TODO: 2 Replace the strings with a reference value
+                                         * */
+
+
                                         Map<String,Object> dataToSave = new HashMap<>();
-                                        dataToSave.put("UID",UID);
-                                        dataToSave.put("Email",Email);
+                                        dataToSave.put("UID",user.getUser_id());
+                                        dataToSave.put("Email",user.getEmail());
+
+                                        dataToSave.put("Last Login", FieldValue.serverTimestamp());
 
                                         mDocRef.set(dataToSave);
 

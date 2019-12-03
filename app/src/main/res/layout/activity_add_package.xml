@@ -52,6 +52,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/price"
             android:text="Price: "/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the receiver Email address"
+            android:id="@+id/destination_email_editText"
+            android:inputType="textEmailAddress"
+            />
 <Button
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
