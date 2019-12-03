@@ -12,15 +12,34 @@ public class Package {
     private GeoPoint geoDestination;
     private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
     private int price;
-    private User user;
+    private User ownerUser;//owner / sender
+    private User delivererUser = null;
+
+    public User getOwnerUser() {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(User ownerUser) {
+        this.ownerUser = ownerUser;
+    }
+
+    public User getDelivererUser() {
+        return delivererUser;
+    }
+
+    public void setDelivererUser(User delivererUser) {
+        this.delivererUser = delivererUser;
+    }
+
     private boolean isPicked = false;
     private boolean isDelivered = false;
+
     public Package(GeoPoint geoSource, GeoPoint geoDestination, Date timeStamp, int price, User user) {
         this.geoSource = geoSource;
         this.geoDestination = geoDestination;
         this.timeStamp = timeStamp;
         this.price = price;
-        this.user = user;
+        this.ownerUser = user;
     }
 
     public GeoPoint getGeoSource() {
@@ -57,13 +76,7 @@ public class Package {
         this.price = price;
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public boolean isPicked() {
         return isPicked;
@@ -88,7 +101,7 @@ public class Package {
                 ", geoDestination=" + geoDestination +
                 ", timeStamp=" + timeStamp +
                 ", price=" + price +
-                ", user=" + user +
+                ", user=" + ownerUser +
                 ", isPicked=" + isPicked +
                 ", isDelivered=" + isDelivered +
                 '}';

@@ -1,8 +1,12 @@
 package com.ap.fietskorier;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     public User user;
 
-
+    private static String TAG = "LoginActivity";
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;

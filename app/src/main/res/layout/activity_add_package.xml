@@ -26,7 +26,7 @@
             <fragment android:id="@+id/source_autocomplete_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                class="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 />
         </androidx.cardview.widget.CardView>
         <TextView
@@ -44,9 +44,14 @@
         <fragment android:id="@+id/destination_autocomplete_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            class="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             />
 </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/price"
+            android:text="Price: "/>
 <Button
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -64,11 +69,10 @@
 
         <fragment
             android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            />
+             />
 
         <ImageView
             android:id="@+id/ic_gps"
