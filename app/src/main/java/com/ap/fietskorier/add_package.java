@@ -380,7 +380,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     //save to the Database
     public void saveFirestore(View view) {
 
-        if(source_Place!=null && destination_Place!=null&&destination_Email!=null) {
+        if(source_Place!=null && destination_Place!=null&&!destination_Email.getText().toString().isEmpty()) {
             Map<String, Object> dataToSave = new HashMap<>();
             //Todo: Hash/Encode the Package ID/Information
            GenerateQR();
@@ -391,7 +391,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             //dataToSave.put(SOURCE_GEO, geoSource);
             dataToSave.put("Price",price);
             dataToSave.put("Distance",distance);
-            dataToSave.put("Destination Email",destination_Email);
+            dataToSave.put("Destination Email",destination_Email.getText().toString());
+            Log.d(TAG, "saveFirestore: "+destination_Email);
             //dataToSave.put(DESTINATION_NAME,      destination_Place.getName());
             dataToSave.put(DESTINATION_LATLNG,    destination_Place.getLatLng());
             dataToSave.put(DESTINATION_ID ,       destination_Place.getId());
