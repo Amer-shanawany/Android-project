@@ -10,13 +10,31 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.drawable.Drawable;
 
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class ShipmentActivity extends AppCompatActivity {
+
+    private final LinkedList<Package> myDataset = new LinkedList<Package>();
+
+    //RECYCLERVIEW
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter myAdapter;
+    private RecyclerView.LayoutManager myLayoutManager;
+    //!!!
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +50,41 @@ public class ShipmentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
+
+        Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
+        Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
+
+        myDataset.add(pakje1);
+        myDataset.add(pakje2);
+        myDataset.add(pakje3);
+        myDataset.add(pakje2);
+        myDataset.add(pakje1);
+        myDataset.add(pakje2);
+        myDataset.add(pakje3);
+        myDataset.add(pakje2);
+
+        //RECYCLERVIEW
+        recyclerView = (RecyclerView) findViewById(R.id.shipments_recyclerview);
+        //fixed size
+        recyclerView.setHasFixedSize(true);
+        //linear layout manager
+        myLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(myLayoutManager);
+        //adapter
+        myAdapter = new PackageAdapter(this, myDataset, new PackageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Package myPackage) {
+                Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        recyclerView.setAdapter(myAdapter);
+        //!!!
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
