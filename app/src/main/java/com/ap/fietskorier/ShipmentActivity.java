@@ -6,6 +6,11 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +30,9 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
+import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.add_package.SOURCE_ID;
+
 public class ShipmentActivity extends AppCompatActivity {
 
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
@@ -34,6 +42,7 @@ public class ShipmentActivity extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
     //!!!
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,8 @@ public class ShipmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //make an instance of this user
+        user = ((UserClient)(getApplicationContext())).getUser();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +62,30 @@ public class ShipmentActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Create a reference to the cities collection
+        CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
+        // Create a query against the collection.
+        Query query = packages.whereEqualTo(SOURCE_ID, user.getUser_id());
+//
+//        // retrieve  query results asynchronously using query.get()
+//        Api
+//        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+//
+//        foreah (){
+//            //            Package temp  =new Package(
+////                    price,
+////                    user,
+////                    mDocRef.getId(),
+////                    source_Place.getAddress(),
+////                    destination_Place.getAddress(),
+////                    destination_Email.getText().toString());
+//        }
+//        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+//            System.out.println(document.getId());
+//        }
+
+        
         Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
 
         Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
