@@ -1,11 +1,8 @@
 package com.ap.fietskorier;
 
 
-<<<<<<< HEAD
 import android.content.Context;
-=======
 import android.app.Activity;
->>>>>>> merged
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,15 +46,11 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     public User user;
 
-<<<<<<< HEAD
-    private static String TAG = "LoginActivity";
+private static String TAG = "LoginActivity";
     private @ServerTimestamp Date   timeStamp;
-=======
-
 Button Btn_fastSingIn;
 
->>>>>>> merged
-    // Choose an arbitrary request code value
+// Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
     private FirebaseAuth.AuthStateListener mAuthStateListener;

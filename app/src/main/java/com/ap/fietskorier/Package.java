@@ -33,9 +33,7 @@ public class Package {
 
     private boolean isPicked = false;
     private boolean isDelivered = false;
-<<<<<<< HEAD
-=======
-    private String packageID;
+private String packageID;
     private String adres1;
     private String adres2;
 
@@ -46,8 +44,6 @@ public class Package {
         adres2 = _adres2;
         isDelivered = _isDelivered;
     }
->>>>>>> merged
-
     public Package(GeoPoint geoSource, GeoPoint geoDestination, Date timeStamp, int price, User user) {
         this.geoSource = geoSource;
         this.geoDestination = geoDestination;
