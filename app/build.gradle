@@ -1,3 +1,4 @@
+
 apply plugin: 'com.android.application'
 
 android {
@@ -12,7 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
+        vectorDrawables.useSupportLibrary = true
 
     }
     buildTypes {
@@ -60,8 +61,13 @@ dependencies {
     //QR Generator //https://www.c-sharpcorner.com/article/how-to-generate-qr-code-in-android/
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
+<<<<<<< HEAD
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0@arr'
 
+=======
+    implementation 'com.google.firebase:firebase-firestore:21.3.0'
+    implementation 'com.google.android.material:material:1.0.0'
+>>>>>>> merged
 
 
 }

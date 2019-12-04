@@ -33,6 +33,20 @@ public class Package {
 
     private boolean isPicked = false;
     private boolean isDelivered = false;
+<<<<<<< HEAD
+=======
+    private String packageID;
+    private String adres1;
+    private String adres2;
+
+    //even een gewone constructor
+    public Package(String _packageID, String _adres1, String _adres2, Boolean _isDelivered) {
+        packageID = _packageID;
+        adres1 = _adres1;
+        adres2 = _adres2;
+        isDelivered = _isDelivered;
+    }
+>>>>>>> merged
 
     public Package(GeoPoint geoSource, GeoPoint geoDestination, Date timeStamp, int price, User user) {
         this.geoSource = geoSource;
@@ -66,7 +80,17 @@ public class Package {
         this.timeStamp = timeStamp;
     }
 
+    public String getPackageID() {
+        return packageID;
+    }
 
+    public String getAddress1() {
+        return adres1;
+    }
+
+    public String getAddress2() {
+        return  adres2;
+    }
 
     public int getPrice() {
         return price;
