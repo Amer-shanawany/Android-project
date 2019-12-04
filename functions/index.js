@@ -64,7 +64,7 @@ exports.onDataAdded = functions.database.ref('/emails/{sessionId}').onCreate(fun
 });
 
 
-//firebase functions:config:set gmail.email="fietskoerier.ap@gmail.com" gmail.password="FietsP@$$w0rd"
+
 */
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
@@ -164,3 +164,28 @@ async function sendGoodbyeEmail(email, displayName) {
   console.log('Account deletion confirmation email sent to:', email);
   return null;
 }
+
+/**
+ * TODO: edit the following function and deploy it in order to send an automatic email 
+ * if somedata is being added to the Database 
+ * forExample:.onDataAdded is watches for changes in database packages/{{something}}
+ * 
+ */
+/*
+exports.onDataAdded = functions.database.ref('/emails/{sessionId}').onCreate(function (snap, context) {
+
+    //here we catch a new data, added to firebase database, it stored in a snap variable
+    const createdData = snap.val();
+    var text = createdData.mail;
+
+    //here we send new data using function for sending emails
+    goMail(text);
+});
+
+*/
+
+/*
+exports.myFunctionName = functions.firestore
+    .document('packages/{{packagID}}').onWrite((change, context) => {
+      // ... Your code here
+    });*/
