@@ -70,10 +70,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intToAddPackages = new Intent(HomeActivity.this,add_package.class);
-
                 startActivity(intToAddPackages);
-
-
 
             }
         });
