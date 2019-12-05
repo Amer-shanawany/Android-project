@@ -46,9 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     public User user;
 
-private static String TAG = "LoginActivity";
+    private static String TAG = "LoginActivity";
     private @ServerTimestamp Date   timeStamp;
-Button Btn_fastSingIn;
+    Button Btn_fastSingIn;
 
 // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;

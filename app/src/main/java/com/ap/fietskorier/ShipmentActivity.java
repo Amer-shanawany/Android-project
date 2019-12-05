@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +43,7 @@ public class ShipmentActivity extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
     //!!!
+    private  FirebaseAuth mFirebaseAuth;
     private User user;
 
     @Override
@@ -51,8 +53,9 @@ public class ShipmentActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //make an instance of this user
-        user = ((UserClient)(getApplicationContext())).getUser();
-
+        //user = ((UserClient)(getApplicationContext())).getUser();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +69,7 @@ public class ShipmentActivity extends AppCompatActivity {
         // Create a reference to the cities collection
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
         // Create a query against the collection.
-        Query query = packages.whereEqualTo(SOURCE_ID, user.getUser_id());
+        //Query query = packages.whereEqualTo(SOURCE_ID, user.getUser_id());
 //
 //        // retrieve  query results asynchronously using query.get()
 //        Api
@@ -86,19 +89,23 @@ public class ShipmentActivity extends AppCompatActivity {
 //        }
 
         
-        Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
+        //Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
+        Package package1 = new Package(null,"sourceAddress 1","Destination Address 1", "email1@receiver.com",9.3);
 
-        Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
-        Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
+        Package package2 = new Package(null,"sourceAddress 2","Destination Address 2", "email2@receiver.com",15.73);
 
-        myDataset.add(pakje1);
-        myDataset.add(pakje2);
-        myDataset.add(pakje3);
-        myDataset.add(pakje2);
-        myDataset.add(pakje1);
-        myDataset.add(pakje2);
-        myDataset.add(pakje3);
-        myDataset.add(pakje2);
+        Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
+        //Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
+        //Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
+        Package package4 = new Package(null,"hardcoded address","yes","fake@ever.us",6.66);
+        myDataset.add(package1);
+        myDataset.add(package2);
+        myDataset.add(package3);
+     myDataset.add(package4);
+//        myDataset.add(pakje1);
+//        myDataset.add(pakje2);
+//        myDataset.add(pakje3);
+//        myDataset.add(pakje2);
 
         //RECYCLERVIEW
         recyclerView = (RecyclerView) findViewById(R.id.shipments_recyclerview);

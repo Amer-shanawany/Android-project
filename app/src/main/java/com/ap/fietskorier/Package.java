@@ -7,13 +7,58 @@ import java.util.Date;
 
 public class Package {
 
-
-    private GeoPoint geoSource;
-    private GeoPoint geoDestination;
-    private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
-    private int price;
+    private String ownerAddress;
+    private String deliveryAddress;
+    //private GeoPoint geoSource;
+    //private GeoPoint geoDestination;
+    private @ServerTimestamp Date timeStamp;//should be set to null when instantiating//
+    private double  price;
     private User ownerUser;//owner / sender
     private User delivererUser = null;
+
+    private String emailDestination;
+
+
+    private boolean isPicked = false;
+    private boolean isDelivered = false;
+    private String packageID;
+
+    public String getOwnerAddress() {
+        return ownerAddress;
+    }
+
+    public void setOwnerAddress(String ownerAddress) {
+        this.ownerAddress = ownerAddress;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getEmailDestination() {
+        return emailDestination;
+    }
+
+    public void setEmailDestination(String emailDestination) {
+        this.emailDestination = emailDestination;
+    }
+
+    public void setPackageID(String packageID) {
+        this.packageID = packageID;
+    }
+
+    public Package(User user, String addressSource, String addressDestination, String emailDestination, double price) {
+        this.ownerUser= user;
+        this.ownerAddress = addressSource;
+        this.deliveryAddress = addressDestination;
+        this.emailDestination = emailDestination;
+        this.price = price;
+
+    }
 
     public User getOwnerUser() {
         return ownerUser;
@@ -30,44 +75,6 @@ public class Package {
     public void setDelivererUser(User delivererUser) {
         this.delivererUser = delivererUser;
     }
-
-    private boolean isPicked = false;
-    private boolean isDelivered = false;
-private String packageID;
-    private String adres1;
-    private String adres2;
-
-    //even een gewone constructor
-    public Package(String _packageID, String _adres1, String _adres2, Boolean _isDelivered) {
-        packageID = _packageID;
-        adres1 = _adres1;
-        adres2 = _adres2;
-        isDelivered = _isDelivered;
-    }
-    public Package(GeoPoint geoSource, GeoPoint geoDestination, Date timeStamp, int price, User user) {
-        this.geoSource = geoSource;
-        this.geoDestination = geoDestination;
-        this.timeStamp = timeStamp;
-        this.price = price;
-        this.ownerUser = user;
-    }
-
-    public GeoPoint getGeoSource() {
-        return geoSource;
-    }
-
-    public void setGeoSource(GeoPoint geoSource) {
-        this.geoSource = geoSource;
-    }
-
-    public GeoPoint getGeoDestination() {
-        return geoDestination;
-    }
-
-    public void setGeoDestination(GeoPoint geoDestination) {
-        this.geoDestination = geoDestination;
-    }
-
     public Date getTimeStamp() {
         return timeStamp;
     }
@@ -80,19 +87,12 @@ private String packageID;
         return packageID;
     }
 
-    public String getAddress1() {
-        return adres1;
-    }
 
-    public String getAddress2() {
-        return  adres2;
-    }
-
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -114,16 +114,4 @@ private String packageID;
         isDelivered = delivered;
     }
 
-    @Override
-    public String toString() {
-        return "Package{" +
-                "geoSource=" + geoSource +
-                ", geoDestination=" + geoDestination +
-                ", timeStamp=" + timeStamp +
-                ", price=" + price +
-                ", user=" + ownerUser +
-                ", isPicked=" + isPicked +
-                ", isDelivered=" + isDelivered +
-                '}';
-    }
 }

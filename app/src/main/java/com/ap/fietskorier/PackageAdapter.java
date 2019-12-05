@@ -38,8 +38,8 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     public void onBindViewHolder(@NonNull PackageViewHolder holder, int position) {
         Package myCurrent = myPackageList.get(position);
         holder.packageID.setText(myCurrent.getPackageID());
-        holder.packageAddress1.setText(myCurrent.getAddress1());
-        holder.packageAddress2.setText(myCurrent.getAddress2());
+        holder.packageAddress1.setText(myCurrent.getOwnerAddress());
+        holder.packageAddress2.setText(myCurrent.getDeliveryAddress());
         holder.bind(myPackageList.get(position),myListener);
     }
 
