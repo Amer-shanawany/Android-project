@@ -3,6 +3,9 @@ package com.ap.fietskorier;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
@@ -21,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.drawable.Drawable;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,10 +37,12 @@ import android.widget.Toast;
 import java.util.LinkedList;
 
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
 import static com.ap.fietskorier.add_package.SOURCE_ID;
 
 public class ShipmentActivity extends AppCompatActivity {
 
+    private static final String TAG = "ShipmentActivity" ;
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
 
     //RECYCLERVIEW
@@ -53,9 +60,9 @@ public class ShipmentActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //make an instance of this user
-        //user = ((UserClient)(getApplicationContext())).getUser();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        user = ((UserClient)(getApplicationContext())).getUser();
+        //mFirebaseAuth = FirebaseAuth.getInstance();
+        //FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +75,25 @@ public class ShipmentActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Create a reference to the cities collection
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
+        packages.whereEqualTo("Owner ID",user.getUser_id()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for(QueryDocumentSnapshot document:task.getResult()){
+                        Log.d(TAG,document.getId() + " => " + document.getData().toString());
+
+                    }
+                }else{
+                    Log.w(TAG, "Error getting documents.",task.getException() );
+                }
+            }
+        });
         // Create a query against the collection.
         //Query query = packages.whereEqualTo(SOURCE_ID, user.getUser_id());
 //
 //        // retrieve  query results asynchronously using query.get()
 //        Api
-//        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        //    ApiFuture<QuerySnapshot> querySnapshot = query.get();
 //
 //        foreah (){
 //            //            Package temp  =new Package(

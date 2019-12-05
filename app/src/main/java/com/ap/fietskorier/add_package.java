@@ -108,7 +108,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     TextView priceTextView;
     EditText destination_Email =null;
     private double price=1;
-
+    private   static String UID;
     public static final String SOURCE_ID ="Source ID";
     public static final String SOURCE_NAME="Source Name";
     public static final String SOURCE_ADDRESS="Source Address";
@@ -148,7 +148,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         //use this line to get the current user information
          user = ((UserClient)(getApplicationContext())).getUser();
-
+            UID = user.getUser_id();
         setContentView(R.layout.activity_add_package);
 
         save_info_btn = findViewById(R.id.save_Package_info);
@@ -388,7 +388,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
            GenerateQR();
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
-            dataToSave.put("PackageID",mDocRef.getId());
+            dataToSave.put("Owner ID",user.getUser_id());
+            dataToSave.put("Package ID",mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
             //dataToSave.put(SOURCE_GEO, geoSource);
             dataToSave.put("Price",price);
