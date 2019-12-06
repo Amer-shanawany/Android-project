@@ -1,6 +1,7 @@
 package com.ap.fietskorier;
 
 import android.Manifest;
+import android.util.Log;
 
 public class Constants {
     public static final int ERROR_DIALOG_REQUEST =9001;
@@ -12,4 +13,11 @@ public class Constants {
     public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String USERS_COLLECTION = "users";
     public static final String PACKAGES_COLLECTIONS = "packages";
+     public static  final String OWNER_ID ="Owner ID" ;
+       public static final String PACKAGE_ID=       "Package ID" ;
+
+    public static final String PRICE =    "Price";
+    public static final String DISTANCE =  "Distance";
+    public static final String  DESTINATION_EMAIL=  "Destination Email";
+    //public static final String  =   "saveFirestore: "  ;
 }

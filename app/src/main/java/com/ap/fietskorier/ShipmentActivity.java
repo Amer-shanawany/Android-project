@@ -36,7 +36,11 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
+import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.Constants.PACKAGE_ID;
+import static com.ap.fietskorier.Constants.PRICE;
+import static com.ap.fietskorier.add_package.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
 import static com.ap.fietskorier.add_package.SOURCE_ID;
 
@@ -50,6 +54,7 @@ public class ShipmentActivity extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
     //!!!
+    private LinkedList<Package> packageList;
     private  FirebaseAuth mFirebaseAuth;
     private User user;
 
@@ -71,7 +76,8 @@ public class ShipmentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+        //TODO : Use //// Source can be CACHE, SERVER, or DEFAULT.
+        //TODO Source source = Source.CACHE;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Create a reference to the cities collection
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
@@ -80,8 +86,24 @@ public class ShipmentActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot document:task.getResult()){
-                        Log.d(TAG,document.getId() + " => " + document.getData().toString());
 
+                        //String temp = document.getDouble("Price").toString();
+                        //Log.d(TAG, user.toString());
+                        Log.d(TAG, document.getString(SOURCE_ADDRESS).toString());
+                        Log.d(TAG, document.getString(DESTINATION_ADDRESS).toString());
+                        Log.d(TAG, document.getString(DESTINATION_EMAIL));
+                        Log.d(TAG, document.getDouble(PRICE).toString());
+
+                        //User user, String addressSource, String addressDestination, String emailDestination, double price
+                        Package tempPackage = new Package(user,
+                                document.getString(SOURCE_ADDRESS),
+                                document.getString(DESTINATION_ADDRESS),
+                                document.getString(DESTINATION_EMAIL),
+                                document.getDouble(PRICE)
+                                );
+                        tempPackage.setPackageID(document.getString(PACKAGE_ID));
+
+                                 myDataset.add(tempPackage);
                     }
                 }else{
                     Log.w(TAG, "Error getting documents.",task.getException() );
@@ -108,22 +130,21 @@ public class ShipmentActivity extends AppCompatActivity {
 //            System.out.println(document.getId());
 //        }
 
-        
+
         //Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
         Package package1 = new Package(null,"sourceAddress 1","Destination Address 1", "email1@receiver.com",9.3);
-
-        Package package2 = new Package(null,"sourceAddress 2","Destination Address 2", "email2@receiver.com",15.73);
-
-        Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
-        //Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
-        //Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
-        Package package4 = new Package(null,"hardcoded address","yes","fake@ever.us",6.66);
+//
+        //Package package2 = new Package(null,"sourceAddress 2","Destination Address 2", "email2@receiver.com",15.73);
+//
+        //Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
+        ////Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
+        ////Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
+        //Package package4 = new Package(null,"hardcoded address","yes","fake@ever.us",6.66);
         myDataset.add(package1);
-        myDataset.add(package2);
-        myDataset.add(package3);
-     myDataset.add(package4);
+        //myDataset.add(package2);
+        //myDataset.add(package3);
+        //myDataset.add(package4);
 //        myDataset.add(pakje1);
-//        myDataset.add(pakje2);
 //        myDataset.add(pakje3);
 //        myDataset.add(pakje2);
 
