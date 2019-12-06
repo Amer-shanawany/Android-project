@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     public User user;
 
-private static String TAG = "LoginActivity";
+    private static String TAG = "LoginActivity";
     private @ServerTimestamp Date   timeStamp;
     Button btn_fastSingIn;
 
@@ -193,12 +193,15 @@ private static String TAG = "LoginActivity";
                             }else{
                                 if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
                                     Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
+                                    User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());
 
-
+                                    ((UserClient)(getApplicationContext())).setUser(user);
                                     //Create a User in the DataBase
-                                    String UID = mFirebaseAuth.getCurrentUser().getUid() ;
+                                    //String UID = mFirebaseAuth.getCurrentUser().getUid() ;
+                                    String UID = user.getUser_id();
+                                    String Email = user.getEmail();
                                     DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(UID);
-                                    String Email = mFirebaseAuth.getCurrentUser().getEmail();
+                                    //String Email = mFirebaseAuth.getCurrentUser().getEmail();
                                     Map<String,Object> dataToSave = new HashMap<>();
                                     //dataToSave.put("UID",UID);
                                     dataToSave.put("Email",Email);

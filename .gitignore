@@ -92,3 +92,14 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+#added
+.gradle
+local.properties
+.idea
+build/
+.DS_Store
+*.iml
+*.apk
+*.aar
+*.zip
+google-services.json

@@ -108,6 +108,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     TextView priceTextView;
     EditText destination_Email =null;
     private double price=1;
+    private   static String UID;
     public static final String SOURCE_ID ="Source ID";
     public static final String SOURCE_NAME="Source Name";
     public static final String SOURCE_ADDRESS="Source Address";
@@ -128,6 +129,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     private Polyline polyline;
      private GeoApiContext geoApiContext = null;
 //
+    private User user;
 
 
     //QR Code
@@ -145,9 +147,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //use this line to get the current user information
-        User user = ((UserClient)(getApplicationContext())).getUser();
-
-
+         user = ((UserClient)(getApplicationContext())).getUser();
+            UID = user.getUser_id();
         setContentView(R.layout.activity_add_package);
 
         save_info_btn = findViewById(R.id.save_Package_info);
@@ -383,10 +384,12 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         if(source_Place!=null && destination_Place!=null&&!destination_Email.getText().toString().isEmpty()) {
             Map<String, Object> dataToSave = new HashMap<>();
             //Todo: Hash/Encode the Package ID/Information
+            //todo: add the strings to the constants.JAVA
            GenerateQR();
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
-            dataToSave.put("PackageID",mDocRef.getId());
+            dataToSave.put("Owner ID",user.getUser_id());
+            dataToSave.put("Package ID",mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
             //dataToSave.put(SOURCE_GEO, geoSource);
             dataToSave.put("Price",price);
@@ -403,6 +406,18 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
 
             //dataToSave.put(DESTINATION_GEO,geoDestination);
+
+            //int price, User sourceUser,
+            // String packageID, String addressSource,
+            // String addressDestination, String destinationEmail
+            //
+//            Package temp  =new Package(
+//                    price,
+//                    user,
+//                    mDocRef.getId(),
+//                    source_Place.getAddress(),
+//                    destination_Place.getAddress(),
+//                    destination_Email.getText().toString());
 
             mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

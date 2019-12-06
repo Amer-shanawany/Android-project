@@ -10,29 +10,37 @@ public class Package {
     private GeoPoint geoSource;
     private GeoPoint geoDestination;
     private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
-    private int price;
+    private double price;
+    private String ownerAddress;
+    private String deliveryAddress;
+    //private GeoPoint geoSource;
+    //private GeoPoint geoDestination;
     private User ownerUser;//owner / sender
     private User delivererUser = null;
 
-    public User getOwnerUser() {
-        return ownerUser;
-    }
+    private String emailDestination;
 
-    public void setOwnerUser(User ownerUser) {
-        this.ownerUser = ownerUser;
-    }
-
-    public User getDelivererUser() {
-        return delivererUser;
-    }
-
-    public void setDelivererUser(User delivererUser) {
-        this.delivererUser = delivererUser;
-    }
 
     private boolean isPicked = false;
     private boolean isDelivered = false;
     private String packageID;
+
+    public String getOwnerAddress() {
+        return ownerAddress;
+    }
+
+    public void setOwnerAddress(String ownerAddress) {
+        this.ownerAddress = ownerAddress;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
     private String adres1;
     private String adres2;
 
@@ -51,22 +59,42 @@ public class Package {
         this.ownerUser = user;
     }
 
-    public GeoPoint getGeoSource() {
-        return geoSource;
+    public String getEmailDestination() {
+        return emailDestination;
     }
 
-    public void setGeoSource(GeoPoint geoSource) {
-        this.geoSource = geoSource;
+    public void setEmailDestination(String emailDestination) {
+        this.emailDestination = emailDestination;
     }
 
-    public GeoPoint getGeoDestination() {
-        return geoDestination;
+    public void setPackageID(String packageID) {
+        this.packageID = packageID;
     }
 
-    public void setGeoDestination(GeoPoint geoDestination) {
-        this.geoDestination = geoDestination;
+    public Package(User user, String addressSource, String addressDestination, String emailDestination, double price) {
+        this.ownerUser= user;
+        this.ownerAddress = addressSource;
+        this.deliveryAddress = addressDestination;
+        this.emailDestination = emailDestination;
+        this.price = price;
+
     }
 
+    public User getOwnerUser() {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(User ownerUser) {
+        this.ownerUser = ownerUser;
+    }
+
+    public User getDelivererUser() {
+        return delivererUser;
+    }
+
+    public void setDelivererUser(User delivererUser) {
+        this.delivererUser = delivererUser;
+    }
     public Date getTimeStamp() {
         return timeStamp;
     }
@@ -87,11 +115,11 @@ public class Package {
         return adres2;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -113,16 +141,4 @@ public class Package {
         isDelivered = delivered;
     }
 
-    @Override
-    public String toString() {
-        return "Package{" +
-                "geoSource=" + geoSource +
-                ", geoDestination=" + geoDestination +
-                ", timeStamp=" + timeStamp +
-                ", price=" + price +
-                ", user=" + ownerUser +
-                ", isPicked=" + isPicked +
-                ", isDelivered=" + isDelivered +
-                '}';
-    }
 }
