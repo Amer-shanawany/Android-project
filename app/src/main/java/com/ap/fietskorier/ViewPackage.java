@@ -6,16 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class DeliverPackage extends AppCompatActivity {
-    Button btn_scanDeliveryCode;
+public class ViewPackage extends AppCompatActivity {
 
+    Button btn_delete;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deliver_package);
+        setContentView(R.layout.activity_view_package);
 
-        btn_scanDeliveryCode = findViewById(R.id.button_scanDeliveryCode);
-        btn_scanDeliveryCode.setOnClickListener(new View.OnClickListener() {
+        btn_delete = findViewById(R.id.button_deletePackage);
+        btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

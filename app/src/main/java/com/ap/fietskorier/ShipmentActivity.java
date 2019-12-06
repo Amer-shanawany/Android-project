@@ -6,6 +6,10 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +29,11 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
+import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+
 public class ShipmentActivity extends AppCompatActivity {
 
+    private CollectionReference myColRef = FirebaseFirestore.getInstance().collection(PACKAGES_COLLECTIONS);
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
 
     //RECYCLERVIEW
@@ -46,10 +53,14 @@ public class ShipmentActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intToAddPackage = new Intent(ShipmentActivity.this, add_package.class);
+                startActivity(intToAddPackage);
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
 
         Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
 
@@ -61,9 +72,10 @@ public class ShipmentActivity extends AppCompatActivity {
         myDataset.add(pakje3);
         myDataset.add(pakje2);
         myDataset.add(pakje1);
-        myDataset.add(pakje2);
-        myDataset.add(pakje3);
-        myDataset.add(pakje2);
+        //myDataset.add(pakje2);
+        //myDataset.add(pakje3);
+        //myDataset.add(pakje2);
+
 
         //RECYCLERVIEW
         recyclerView = (RecyclerView) findViewById(R.id.shipments_recyclerview);
@@ -76,6 +88,9 @@ public class ShipmentActivity extends AppCompatActivity {
         myAdapter = new PackageAdapter(this, myDataset, new PackageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Package myPackage) {
+                Intent intToViewPackage = new Intent(ShipmentActivity.this, ViewPackage.class);
+                startActivity(intToViewPackage);
+
                 Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
             }
         });

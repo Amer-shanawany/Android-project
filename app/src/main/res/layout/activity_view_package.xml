@@ -4,7 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PickupPackage">
+    tools:context=".ViewPackage">
+
+    <TextView
+        android:id="@+id/PickupQRCode_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Pickup QR Code"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryAddress" />
 
     <TextView
         android:id="@+id/sourceAddress"
@@ -99,9 +116,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Pickup package"
+        android:text="Package details"
         android:textAlignment="center"
-
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +134,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="Package ID"
-
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +153,7 @@
 
 
     <Button
-        android:id="@+id/button_scanPickupCode"
+        android:id="@+id/button_deletePackage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -146,7 +161,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Scan PICKUP code"
+        android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

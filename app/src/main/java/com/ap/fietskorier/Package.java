@@ -7,7 +7,6 @@ import java.util.Date;
 
 public class Package {
 
-
     private GeoPoint geoSource;
     private GeoPoint geoDestination;
     private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
@@ -33,7 +32,7 @@ public class Package {
 
     private boolean isPicked = false;
     private boolean isDelivered = false;
-private String packageID;
+    private String packageID;
     private String adres1;
     private String adres2;
 
@@ -85,7 +84,7 @@ private String packageID;
     }
 
     public String getAddress2() {
-        return  adres2;
+        return adres2;
     }
 
     public int getPrice() {

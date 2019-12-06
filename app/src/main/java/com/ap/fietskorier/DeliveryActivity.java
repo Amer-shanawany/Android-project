@@ -15,8 +15,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 public class DeliveryActivity extends AppCompatActivity {
+
+    Button BtnToDeliverPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +28,28 @@ public class DeliveryActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        BtnToDeliverPackage = findViewById(R.id.DeliverPackage);
+
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intentToSearchPackage = new Intent(DeliveryActivity.this,SearchPackage.class);
+                startActivity(intentToSearchPackage);
             }
         });
+
+        BtnToDeliverPackage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToDeliverPackage = new Intent(DeliveryActivity.this,DeliverPackage.class);
+                startActivity(intentToDeliverPackage);
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
 private static String TAG = "LoginActivity";
     private @ServerTimestamp Date   timeStamp;
-Button Btn_fastSingIn;
+    Button btn_fastSingIn;
 
 // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
@@ -65,7 +65,7 @@ Button Btn_fastSingIn;
         Password =findViewById(R.id.Password_singIn);
         Btn_singIn = findViewById(R.id.button_signIn);
         tvSignUp = findViewById(R.id.no_account_signUp);
-        Btn_fastSingIn = findViewById(R.id.button_fastlogin);
+        btn_fastSingIn = findViewById(R.id.button_fastlogin);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
 
@@ -178,7 +178,7 @@ Button Btn_fastSingIn;
             }
         });
 
-        Btn_fastSingIn.setOnClickListener(new View.OnClickListener() {
+        btn_fastSingIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //EmailID.setText("jonas.baert@icloud.com");
