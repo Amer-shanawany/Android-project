@@ -71,49 +71,4 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
             });
         }
     }
-
-
-
-    /*private final LinkedList<String> myDataset;
-    private LayoutInflater myInflater;
-
-    // referentie naar de data (hier slechts 1 string - kan nog toegevoegd worden
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        //data is just a string
-        public TextView textView;
-        public MyViewHolder (TextView v) {
-            super(v);
-            textView = v;
-        }
-    }
-    /*
-    // constructor voor de dataset (afhankelijk van type)
-    public MyAdapter(Context context, LinkedList<String> myDataset) {
-        myInflater = LayoutInflater.from(context);
-        this.myDataset = myDataset;
-    }
-
-    // new views
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //create
-        View myItemView = myInflater.inflate(R.layout.packagelist_item, parent, false);
-
-        return new MyViewHolder<>
-    }
-
-    //replace the contents of a view
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // get element from your dataset at this position
-        // replace the contentq of the view with that element
-        holder.textView.setText(myDataset[position]);
-    }
-
-    //return the size of your dataset
-    @Override
-    public int getItemCount() {
-        return myDataset.size();
-    }*/
-
 }

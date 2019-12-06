@@ -52,6 +52,8 @@ import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
 
 public class ShipmentActivity extends AppCompatActivity {
 
+    FirebaseFirestore db;
+
     private CollectionReference myColRef = FirebaseFirestore.getInstance().collection(PACKAGES_COLLECTIONS);
 
 
@@ -74,6 +76,12 @@ public class ShipmentActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //make an instance of this user
+
+        db = FirebaseFirestore.getInstance();
+        // Create a reference to the cities collection
+
+
+
         user = ((UserClient)(getApplicationContext())).getUser();
         //mFirebaseAuth = FirebaseAuth.getInstance();
         //FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -88,94 +96,6 @@ public class ShipmentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-        Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
-
-        Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
-        Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
-
-        myDataset.add(pakje1);
-        myDataset.add(pakje2);
-        myDataset.add(pakje3);
-        myDataset.add(pakje2);
-        myDataset.add(pakje1);
-        //myDataset.add(pakje2);
-        //myDataset.add(pakje3);
-        //myDataset.add(pakje2);
-
-        //TODO : Use //// Source can be CACHE, SERVER, or DEFAULT.
-        //TODO Source source = Source.CACHE;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Create a reference to the cities collection
-        CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
-        packages.whereEqualTo("Owner ID",user.getUser_id()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for(QueryDocumentSnapshot document:task.getResult()){
-
-                        //String temp = document.getDouble("Price").toString();
-                        //Log.d(TAG, user.toString());
-                        Log.d(TAG, document.getString(SOURCE_ADDRESS).toString());
-                        Log.d(TAG, document.getString(DESTINATION_ADDRESS).toString());
-                        Log.d(TAG, document.getString(DESTINATION_EMAIL));
-                        Log.d(TAG, document.getDouble(PRICE).toString());
-
-                        //User user, String addressSource, String addressDestination, String emailDestination, double price
-                        Package tempPackage = new Package(user,
-                                document.getString(SOURCE_ADDRESS),
-                                document.getString(DESTINATION_ADDRESS),
-                                document.getString(DESTINATION_EMAIL),
-                                document.getDouble(PRICE)
-                                );
-                        tempPackage.setPackageID(document.getString(PACKAGE_ID));
-
-                                 myDataset.add(tempPackage);
-                    }
-                }else{
-                    Log.w(TAG, "Error getting documents.",task.getException() );
-                }
-            }
-        });
-
-        // Create a query against the collection.
-        //Query query = packages.whereEqualTo(SOURCE_ID, user.getUser_id());
-//
-//        // retrieve  query results asynchronously using query.get()
-//        Api
-        //    ApiFuture<QuerySnapshot> querySnapshot = query.get();
-//
-//        foreah (){
-//            //            Package temp  =new Package(
-////                    price,
-////                    user,
-////                    mDocRef.getId(),
-////                    source_Place.getAddress(),
-////                    destination_Place.getAddress(),
-////                    destination_Email.getText().toString());
-//        }
-//        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-//            System.out.println(document.getId());
-//        }
-
-
-        //Package pakje1 = new Package("fdsfe5678rreer","Camelialei 13","2170 Merksem", false);
-        Package package1 = new Package(null,"sourceAddress 1","Destination Address 1", "email1@receiver.com",9.3);
-//
-        //Package package2 = new Package(null,"sourceAddress 2","Destination Address 2", "email2@receiver.com",15.73);
-//
-        //Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
-        ////Package pakje2 = new Package("ff89rze34Ftyuy","Bredabaan 256","2170 Merksem", false);
-        ////Package pakje3 = new Package("34F5679DIOP324","Meir 234","2000 Antwerpen", false);
-        //Package package4 = new Package(null,"hardcoded address","yes","fake@ever.us",6.66);
-        myDataset.add(package1);
-        //myDataset.add(package2);
-        //myDataset.add(package3);
-        //myDataset.add(package4);
-//        myDataset.add(pakje1);
-//        myDataset.add(pakje3);
-//        myDataset.add(pakje2);
 
         //RECYCLERVIEW
         recyclerView = (RecyclerView) findViewById(R.id.shipments_recyclerview);
@@ -194,12 +114,11 @@ public class ShipmentActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
             }
         });
+
         recyclerView.setAdapter(myAdapter);
-        //!!!
 
+        updateDataset();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -230,5 +149,40 @@ public class ShipmentActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateDataset() {
+
+        CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
+        packages.whereEqualTo("Owner ID", user.getUser_id()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                        //String temp = document.getDouble("Price").toString();
+                        //Log.d(TAG, user.toString());
+                        Log.d(TAG, document.getString(SOURCE_ADDRESS).toString());
+                        Log.d(TAG, document.getString(DESTINATION_ADDRESS).toString());
+                        Log.d(TAG, document.getString(DESTINATION_EMAIL));
+                        Log.d(TAG, document.getDouble(PRICE).toString());
+
+                        //User user, String addressSource, String addressDestination, String emailDestination, double price
+                        Package tempPackage = new Package(user,
+                                document.getString(SOURCE_ADDRESS),
+                                document.getString(DESTINATION_ADDRESS),
+                                document.getString(DESTINATION_EMAIL),
+                                document.getDouble(PRICE)
+                        );
+                        tempPackage.setPackageID(document.getString(PACKAGE_ID));
+                        myDataset.add(tempPackage);
+                        myAdapter.notifyDataSetChanged();
+
+                    }
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.getException());
+                }
+            }
+        });
     }
 }
