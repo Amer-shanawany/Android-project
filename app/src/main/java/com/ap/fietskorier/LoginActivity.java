@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-                    Intent i = new Intent(LoginActivity.this,HomeActivity.class );
+                    Intent i = new Intent(LoginActivity.this,ShipmentActivity.class );
 
 
 
@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this,"Login Error, Please login again", Toast.LENGTH_SHORT).show();
                                 }else{
                                     if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
-                                    Intent intToHome = new Intent(LoginActivity.this,HomeActivity.class);
+                                    Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
 
 
                                         User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());

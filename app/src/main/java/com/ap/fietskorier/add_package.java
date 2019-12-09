@@ -600,6 +600,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                         //add the save to database method here
 
                         saveFirestore(v);
+                        finish();
                     }
                 })
         .setNegativeButton("Cancel",null);
