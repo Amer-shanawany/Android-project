@@ -83,9 +83,20 @@ import androidmads.library.qrgenearator.QRGSaver;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
+ import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
+import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
+import static com.ap.fietskorier.Constants.DESTINATION_ID;
+import static com.ap.fietskorier.Constants.DESTINATION_LATLNG;
+import static com.ap.fietskorier.Constants.DISTANCE;
 import static com.ap.fietskorier.Constants.FINE_LOCATION;
 import static com.ap.fietskorier.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+import static com.ap.fietskorier.Constants.OWNER_ID;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.Constants.PACKAGE_ID;
+import static com.ap.fietskorier.Constants.PRICE;
+import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
+import static com.ap.fietskorier.Constants.SOURCE_ID;
+import static com.ap.fietskorier.Constants.SOURCE_LATLNG;
 
 public class add_package extends AppCompatActivity  implements OnMapReadyCallback  {
 
@@ -109,16 +120,16 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     EditText destination_Email =null;
     private double price=1;
     private   static String UID;
-    public static final String SOURCE_ID ="Source ID";
-    public static final String SOURCE_NAME="Source Name";
-    public static final String SOURCE_ADDRESS="Source Address";
-    public static final String SOURCE_LATLNG="Source LatLng";
-    public static final String DESTINATION_ID="Destination ID";
-    public static final String DESTINATION_NAME="Destination Name";
-    public static final String DESTINATION_ADDRESS="Destination Address";
-    public static final String DESTINATION_LATLNG="Destination LatLng";
-    public static final String SOURCE_GEO = "Source GeoPoint";
-    public static final String DESTINATION_GEO = "Destination GeoPoint";
+   //public static final String SOURCE_ID ="Source ID";
+   //public static final String SOURCE_NAME="Source Name";
+   //public static final String SOURCE_ADDRESS="Source Address";
+   //public static final String SOURCE_LATLNG="Source LatLng";
+   //public static final String DESTINATION_ID="Destination ID";
+   //public static final String DESTINATION_NAME="Destination Name";
+   //public static final String DESTINATION_ADDRESS="Destination Address";
+   //public static final String DESTINATION_LATLNG="Destination LatLng";
+   //public static final String SOURCE_GEO = "Source GeoPoint";
+   //public static final String DESTINATION_GEO = "Destination GeoPoint";
     //GeoApiContext context = new GeoApiContext.builder();
     private GeoPoint geoSource;
      private GeoPoint geoDestination;
@@ -388,14 +399,14 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
            GenerateQR();
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
-            dataToSave.put("Owner ID",user.getUser_id());
-            dataToSave.put("Package ID",mDocRef.getId());
+            dataToSave.put(OWNER_ID,user.getUser_id());
+            dataToSave.put(PACKAGE_ID,mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
             //dataToSave.put(SOURCE_GEO, geoSource);
-            dataToSave.put("Price",price);
-            dataToSave.put("Distance",distance);
-            dataToSave.put("Destination Email",destination_Email.getText().toString());
-            Log.d(TAG, "saveFirestore: "+destination_Email);
+            dataToSave.put(PRICE,price);
+            dataToSave.put(DISTANCE,distance);
+            dataToSave.put(DESTINATION_EMAIL,destination_Email.getText().toString());
+            Log.d(TAG, "saveFirestore: "+destination_Email.getText().toString());
             //dataToSave.put(DESTINATION_NAME,      destination_Place.getName());
             dataToSave.put(DESTINATION_LATLNG,    destination_Place.getLatLng());
             dataToSave.put(DESTINATION_ID ,       destination_Place.getId());

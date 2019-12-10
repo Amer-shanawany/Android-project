@@ -103,3 +103,6 @@ build/
 *.aar
 *.zip
 google-services.json
+functions/fietskorier-ap-firebase-adminsdk-vvts9-a265e5cac5.json
+
+*.properties

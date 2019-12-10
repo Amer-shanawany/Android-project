@@ -13,13 +13,16 @@ public class Constants {
     public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String USERS_COLLECTION = "users";
     public static final String PACKAGES_COLLECTIONS = "packages";
-    public static  final String OWNER_ID ="Owner ID" ;
-    public static final String PACKAGE_ID=       "Package ID";
-    public static final String PRICE =    "Price";
-    public static final String DISTANCE =  "Distance";
-    public static final String DESTINATION_EMAIL =  "Destination Email";
-    public static final String DESTINATION_ADDRESS = "Destination Address";
-    public static final String SOURCE_ADDRESS = "Source Address";
-
+    public static  final String OWNER_ID ="owner_id" ;
+    public static final String PACKAGE_ID=       "pakcage_id";
+    public static final String PRICE =    "price";
+    public static final String DISTANCE =  "distance";
+    public static final String DESTINATION_EMAIL =  "destination_email";
+    public static final String DESTINATION_ADDRESS = "destination_address";
+    public static final String SOURCE_ADDRESS = "source_address";
+    public static final  String DESTINATION_LATLNG = "destination_lat_lon";
+    public static final String DESTINATION_ID = "destination_id";
+    public static final String SOURCE_LATLNG= "source_lat_lon";
+    public static final String SOURCE_ID = "source_id";
     //public static final String  =   "saveFirestore: "  ;
 }
