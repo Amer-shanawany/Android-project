@@ -1,10 +1,13 @@
 package com.ap.fietskorier;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.icu.text.Transliterator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +43,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
         holder.packageID.setText(myCurrent.getPackageID());
         holder.packageDestinationAddress.setText(myCurrent.getDeliveryAddress());
         holder.packageDestinationEmail.setText(myCurrent.getEmailDestination());
+        holder.packageStatus.setImageResource(myCurrent.getStatus());
         holder.bind(myPackageList.get(position),myListener);
     }
 
@@ -52,6 +56,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
         public final TextView packageID;
         public final TextView packageDestinationAddress;
         public final TextView packageDestinationEmail;
+        public final ImageView packageStatus;
         final PackageAdapter myAdapter;
 
         public PackageViewHolder(View itemView, PackageAdapter adapter) {
@@ -59,6 +64,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
             packageID = itemView.findViewById(R.id.packageID);
             packageDestinationAddress = itemView.findViewById(R.id.packageDestinationAddress);
             packageDestinationEmail = itemView.findViewById(R.id.packageDestinationEmail);
+            packageStatus = itemView.findViewById(R.id.status);
             this.myAdapter = adapter;
         }
 

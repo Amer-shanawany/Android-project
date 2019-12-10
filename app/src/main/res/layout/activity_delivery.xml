@@ -6,16 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".DeliveryActivity">
 
-    <Button
-        android:id="@+id/DeliverPackage"
-        android:layout_width="249dp"
-        android:layout_height="186dp"
-        android:text="klik op een pakketje in de lijst om het pakketje te leveren"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/delivery_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.602"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.255" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"

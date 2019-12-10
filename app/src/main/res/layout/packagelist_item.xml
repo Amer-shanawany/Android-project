@@ -11,12 +11,14 @@
         android:id="@+id/packageID"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:text="packageID"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/status"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -24,12 +26,14 @@
         android:id="@+id/packageDestinationAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+
         android:text="adreslijn 1"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="@+id/packageID"
-        app:layout_constraintStart_toStartOf="@+id/packageID"
+        app:layout_constraintStart_toEndOf="@+id/status"
         app:layout_constraintTop_toBottomOf="@+id/packageID" />
 
     <TextView
@@ -44,6 +48,13 @@
         app:layout_constraintStart_toStartOf="@+id/packageDestinationAddress"
         app:layout_constraintTop_toBottomOf="@+id/packageDestinationAddress" />
 
+    <ImageView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/packageID"
+        tools:srcCompat="@drawable/ic_send_red" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

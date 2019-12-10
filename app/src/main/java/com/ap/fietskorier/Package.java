@@ -146,4 +146,10 @@ public class Package {
     public void setPickupQR(String code) { this.pickupQRUrl = code;
     }
 
+    public int getStatus() {
+        return R.drawable.ic_check_red;
+
+        //TODO RETURN THE APPROPRIATE STATUS!!!
+    }
+
 }

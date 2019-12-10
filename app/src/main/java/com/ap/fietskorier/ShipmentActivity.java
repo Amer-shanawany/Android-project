@@ -45,10 +45,6 @@ import static com.ap.fietskorier.add_package.PICKUP_QR_URL;
 import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
 
 public class ShipmentActivity extends AppCompatActivity {
-    public static final String EXTRA_PACKAGEID = "com.ap.fietskorier.extra.package";
-    public static final String EXTRA_PACKAGESOURCEADDRESS = "com.ap.fietskorier.extra.package";
-    public static final String EXTRA_PACKAGEDESTINATIONADDRESS = "com.ap.fietskorier.extra.package";
-    public static final String EXTRA_PACKAGEDESTINATIONEMAIL = "com.ap.fietskorier.extra.package";
 
     private static final String TAG = "ShipmentActivity" ;
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
@@ -68,12 +64,12 @@ public class ShipmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         //make an instance of this user
         user = ((UserClient)(getApplicationContext())).getUser();
         //mFirebaseAuth = FirebaseAuth.getInstance();
         //FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
-
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
