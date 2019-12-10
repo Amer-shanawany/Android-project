@@ -11,6 +11,7 @@ public class Package {
     private GeoPoint geoDestination;
     private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
     private double price;
+    private String pickupQRUrl;
     private String ownerAddress;
     private String deliveryAddress;
     //private GeoPoint geoSource;
@@ -123,8 +124,6 @@ public class Package {
         this.price = price;
     }
 
-
-
     public boolean isPicked() {
         return isPicked;
     }
@@ -139,6 +138,12 @@ public class Package {
 
     public void setDelivered(boolean delivered) {
         isDelivered = delivered;
+    }
+
+    public String getPickupQR() { return pickupQRUrl;
+    }
+
+    public void setPickupQR(String code) { this.pickupQRUrl = code;
     }
 
 }

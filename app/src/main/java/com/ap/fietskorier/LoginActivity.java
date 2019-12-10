@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //EmailID.setText("jonas.baert@icloud.com");
                 //Password.setText("123456");
-                String email = "s109802@ap.be";
+                String email = "meeplemaker@gmail.com";
                 String pwd = "123456";
                 mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override

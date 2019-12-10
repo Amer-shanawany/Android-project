@@ -49,6 +49,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -65,6 +66,7 @@ import com.google.zxing.WriterException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -119,6 +121,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     public static final String DESTINATION_LATLNG="Destination LatLng";
     public static final String SOURCE_GEO = "Source GeoPoint";
     public static final String DESTINATION_GEO = "Destination GeoPoint";
+    public static final String PICKUP_QR_URL = "Pickup QR code download URL";
     //GeoApiContext context = new GeoApiContext.builder();
     private GeoPoint geoSource;
      private GeoPoint geoDestination;
@@ -385,7 +388,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             Map<String, Object> dataToSave = new HashMap<>();
             //Todo: Hash/Encode the Package ID/Information
             //todo: add the strings to the constants.JAVA
-           GenerateQR();
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
             dataToSave.put("Owner ID",user.getUser_id());
@@ -404,6 +406,10 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_LATLNG,     source_Place.getLatLng());
             dataToSave.put(SOURCE_ID ,        source_Place.getId());
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
+
+            GenerateQR();
+
+            //dataToSave.put(PICKUP_QR_URL, uri);
 
             //dataToSave.put(DESTINATION_GEO,geoDestination);
 
@@ -600,6 +606,9 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                         //add the save to database method here
 
                         saveFirestore(v);
+
+                        /*Intent intent = new Intent(add_package.this, ShipmentActivity.class);
+                        startActivity(intent);*/
                     }
                 })
         .setNegativeButton("Cancel",null);
@@ -686,8 +695,13 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
 
 
     public void GenerateQR(){
+
+        String DownloadURL = "";
+
         //qrGenerator(view,mDocRef.getId());
          String inputValue = mDocRef.getId();
+
+
 
         if (inputValue.length() > 0) {
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -707,6 +721,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                 byte[] data = baos.toByteArray();
                 //this upoad method, save QR-images to Firebase Cloud Storage
                 UploadTask uploadTask = mountainsRef.putBytes(data);
+
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
@@ -717,6 +732,39 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                         // ...
+                        //Log.d(TAG, )
+                        mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Uri downloadUrl = uri;
+                                Log.d(TAG, "OK");
+                                Log.d(TAG, downloadUrl.toString());
+                                String url = downloadUrl.toString();
+
+                                //update firebase
+                                Map<String, Object> dataToSave = new HashMap<>();
+                                dataToSave.put(PICKUP_QR_URL, url);
+                                mDocRef.update(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Document has been saved! ");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Document was not saved!", e);
+                                    }
+                                });
+
+                                //intent naar de geupdate lijst...
+                                Intent intent = new Intent(add_package.this, ShipmentActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                        //Log.d(TAG, "OK");
+                        //Log.d(TAG,taskSnapshot.getMetadata().getCustomMetadataKeys(""));
+                        //Log.d(TAG, link);
+                        //Log.d(TAG, mountainsRef.getDownloadUrl().toString());
                     }
                 });
                 Log.d(TAG, "GenerateQR: is successfull");

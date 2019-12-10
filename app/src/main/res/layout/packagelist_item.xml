@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/packageAddress1"
+        android:id="@+id/packageDestinationAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="adreslijn 1"
@@ -33,16 +33,16 @@
         app:layout_constraintTop_toBottomOf="@+id/packageID" />
 
     <TextView
-        android:id="@+id/packageAddress2"
+        android:id="@+id/packageDestinationEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="adreslijn 2"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
 
         android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="@+id/packageAddress1"
-        app:layout_constraintStart_toStartOf="@+id/packageAddress1"
-        app:layout_constraintTop_toBottomOf="@+id/packageAddress1" />
+        app:layout_constraintEnd_toEndOf="@+id/packageDestinationAddress"
+        app:layout_constraintStart_toStartOf="@+id/packageDestinationAddress"
+        app:layout_constraintTop_toBottomOf="@+id/packageDestinationAddress" />
 
 
 

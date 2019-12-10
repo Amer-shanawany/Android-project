@@ -41,9 +41,14 @@ import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
 import static com.ap.fietskorier.Constants.PACKAGE_ID;
 import static com.ap.fietskorier.Constants.PRICE;
 import static com.ap.fietskorier.add_package.DESTINATION_ADDRESS;
+import static com.ap.fietskorier.add_package.PICKUP_QR_URL;
 import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
 
-public class    ShipmentActivity extends AppCompatActivity {
+public class ShipmentActivity extends AppCompatActivity {
+    public static final String EXTRA_PACKAGEID = "com.ap.fietskorier.extra.package";
+    public static final String EXTRA_PACKAGESOURCEADDRESS = "com.ap.fietskorier.extra.package";
+    public static final String EXTRA_PACKAGEDESTINATIONADDRESS = "com.ap.fietskorier.extra.package";
+    public static final String EXTRA_PACKAGEDESTINATIONEMAIL = "com.ap.fietskorier.extra.package";
 
     private static final String TAG = "ShipmentActivity" ;
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
@@ -77,6 +82,7 @@ public class    ShipmentActivity extends AppCompatActivity {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 Intent i = new Intent(ShipmentActivity.this,add_package.class);
+
                 startActivity(i);
             }
         });
@@ -154,12 +160,14 @@ public class    ShipmentActivity extends AppCompatActivity {
                                         addPackage.setEmailDestination(document.getDocument().getString(DESTINATION_EMAIL));
                                         addPackage.setDeliveryAddress(document.getDocument().getString(DESTINATION_ADDRESS));
                                         addPackage.setOwnerAddress(document.getDocument().getString(SOURCE_ADDRESS));
+                                        addPackage.setPickupQR(document.getDocument().getString(PICKUP_QR_URL));
                                         myDataset.add(addPackage);
                                         myAdapter.notifyDataSetChanged();}
 
                                     break;
                                 case MODIFIED:
-                                    Log.d(TAG, "Modified Package: " + document.getDocument().getData());
+                                        Log.d(TAG, "Modified Package: " + document.getDocument().getData());
+
 
                                     break;
                                 case REMOVED:
@@ -196,7 +204,18 @@ public class    ShipmentActivity extends AppCompatActivity {
         myAdapter = new PackageAdapter(this, myDataset, new PackageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Package myPackage) {
-                Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(ShipmentActivity.this,ViewPackage.class);
+                Bundle extras = new Bundle();
+                //extras.putParcelable(EXTRA_PACKAGE, myPackage);
+
+                extras.putString("ID",myPackage.getPackageID());
+                extras.putString("SOURCE", myPackage.getOwnerAddress());
+                extras.putString("DESTINATION", myPackage.getDeliveryAddress());
+                extras.putString("EMAIL", myPackage.getEmailDestination());
+                extras.putString("QR", myPackage.getPickupQR());
+                i.putExtras(extras);
+                startActivity(i);
+                //Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(myAdapter);

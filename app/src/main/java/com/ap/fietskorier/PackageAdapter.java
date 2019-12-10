@@ -38,8 +38,8 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     public void onBindViewHolder(@NonNull PackageViewHolder holder, int position) {
         Package myCurrent = myPackageList.get(position);
         holder.packageID.setText(myCurrent.getPackageID());
-        holder.packageAddress1.setText(myCurrent.getOwnerAddress());
-        holder.packageAddress2.setText(myCurrent.getDeliveryAddress());
+        holder.packageDestinationAddress.setText(myCurrent.getDeliveryAddress());
+        holder.packageDestinationEmail.setText(myCurrent.getEmailDestination());
         holder.bind(myPackageList.get(position),myListener);
     }
 
@@ -50,15 +50,15 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
 
     class PackageViewHolder extends RecyclerView.ViewHolder {
         public final TextView packageID;
-        public final TextView packageAddress1;
-        public final TextView packageAddress2;
+        public final TextView packageDestinationAddress;
+        public final TextView packageDestinationEmail;
         final PackageAdapter myAdapter;
 
         public PackageViewHolder(View itemView, PackageAdapter adapter) {
             super(itemView);
             packageID = itemView.findViewById(R.id.packageID);
-            packageAddress1 = itemView.findViewById(R.id.packageAddress1);
-            packageAddress2 = itemView.findViewById(R.id.packageAddress2);
+            packageDestinationAddress = itemView.findViewById(R.id.packageDestinationAddress);
+            packageDestinationEmail = itemView.findViewById(R.id.packageDestinationEmail);
             this.myAdapter = adapter;
         }
 
