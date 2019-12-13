@@ -56,6 +56,7 @@ public class activity_maps extends AppCompatActivity
         Toast.makeText(this,"Map is ready ",Toast.LENGTH_SHORT).show();
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
+
         LatLng sydney = new LatLng(-33.852, 151.211);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker   in Sydney"));

@@ -1,5 +1,6 @@
 package com.ap.fietskorier;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -8,19 +9,53 @@ import java.util.Date;
 public class Package {
 
     private GeoPoint geoSource;
+
+    public GeoPoint getGeoSource() {
+        return geoSource;
+    }
+
+    public void setGeoSource(GeoPoint geoSource) {
+        this.geoSource = geoSource;
+    }
+
+    public GeoPoint getGeoDestination() {
+        return geoDestination;
+    }
+
+    public void setGeoDestination(GeoPoint geoDestination) {
+        this.geoDestination = geoDestination;
+    }
+
     private GeoPoint geoDestination;
     private @ServerTimestamp Date timeStamp;//should be set to null when instantiating
     private double price;
     private String pickupQRUrl;
     private String ownerAddress;
     private String deliveryAddress;
-    //private GeoPoint geoSource;
-    //private GeoPoint geoDestination;
+
     private User ownerUser;//owner / sender
     private User delivererUser = null;
 
     private String emailDestination;
 
+    public LatLng getSource_latlng() {
+        return source_latlng;
+    }
+
+    public void setSource_latlng(LatLng source_latlng) {
+        this.source_latlng = source_latlng;
+    }
+
+    public LatLng getDestination_latlng() {
+        return destination_latlng;
+    }
+
+    public void setDestination_latlng(LatLng destination_latlng) {
+        this.destination_latlng = destination_latlng;
+    }
+
+    private LatLng source_latlng;
+    private LatLng destination_latlng;
 
     private boolean isPicked = false;
     private boolean isDelivered = false;

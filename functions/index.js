@@ -84,7 +84,47 @@ exports.onDataAdded = functions.database.ref('/emails/{sessionId}').onCreate(fun
 'use strict';
 
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
+const gcs = require('@google-cloud/storage');
+const spawn = require('child-process-promise').spawn
+//
+admin.initializeApp();
+const db = admin.firestore();
+
+//refernce the databank -> packages collection 
+// exports.sendQR2Receiver = functions.firestore
+// .document('packages/{packageID}').onCreate(async (change,context)=>{
+//   //TODO: send an email
+//    const newPackage = await db.collection('packages').doc('{packageID}').get();
+//   const emailRec = newPackage.get('Destination Email');
+//   var  storageRef =functions.storage.object().ref();
+//   var QRimagesRef = storageRef.child("/qrpackages/{packageeID}");
+// return sendQR2Receiver(emailRec,QRimagesRef);
+// });
+// //
+
+// ////////////const w = require(@google-cloud/storage)
+// // Sends a welcome email to the given user.
+// async function  sendQR2Receiver(email, Qrcode) {
+//   const mailOptions = {
+//     from: `${APP_NAME} <noreply@fietskoerier.ap.be>`,
+//     to: email,
+//   };
+ 
+
+  
+//    mailOptions.subject = `Here's a QR to the package is on the way ${APP_NAME}!`;
+//   mailOptions.text = `Hey ${displayName || ''}! Welcome to ${APP_NAME}. I hope you will enjoy our service.
+//   <img src="${Qrcode}" alt="Scan me!">
+
+//   `; 
+//   mailOptions
+//   await mailTransport.sendMail(mailOptions);
+//   console.log('Qr is Sent', email);
+//   return null;
+// }
+
 // Configure the email transport using the default SMTP transport and a GMail account.
 // For Gmail, enable these:
 // 1. https://www.google.com/settings/security/lesssecureapps
@@ -134,6 +174,7 @@ exports.sendByeEmail = functions.auth.user().onDelete((user) => {
   return sendGoodbyeEmail(email, displayName);
 });
 // [END sendByeEmail]
+ 
 
 // Sends a welcome email to the given user.
 async function sendWelcomeEmail(email, displayName) {
@@ -184,8 +225,59 @@ exports.onDataAdded = functions.database.ref('/emails/{sessionId}').onCreate(fun
 
 */
 
-/*
-exports.myFunctionName = functions.firestore
-    .document('packages/{{packagID}}').onWrite((change, context) => {
-      // ... Your code here
-    });*/
+
+
+// Listen for changes in all documents in the 'users' collection
+exports.useWildcard = functions.firestore
+    .document('packages/{packageID}')
+    .onWrite((change,context) => {
+      // If we set `/users/marie` to {name: "Marie"} then
+      // context.params.userId == "marie"
+      // ... and ...
+      // change.after.data() == {name: "Marie"}
+      //console.log(change.fieldsProto)
+       //console.log(context.params.packagID);
+        db.collection('packages').doc(context.params.packageID).get()
+       .then(async (doc)=> {
+         /*
+         console.log(doc.id);
+         console.log(context.params.packageID);
+         console.log(doc.data());*/
+        const jsonObj = doc.data();
+        //change this line into Destination
+         const emailRx = jsonObj["Destination Email"] ;
+         console.log(emailRx);
+        const customer = "dear customer";
+
+         const QrRx = jsonObj["Pickup QR code download URL"]
+        console.log(QrRx);
+ 
+            console.log(doc);
+            return await sendQrCode(emailRx,customer,QrRx);
+       })
+       .catch(err=>{
+         console.log('Error getting the document', err);
+         process.exit();
+       })
+     });
+     
+     async function sendQrCode(email, displayName,QrLink) {
+      const mailOptions = {
+        from: `${APP_NAME} <noreply@fietskoerier.ap.be>`,
+        to: email,
+      };
+    
+      // The user subscribed to the newsletter.
+      mailOptions.subject = `${APP_NAME}! - Your Package is on the way !`;
+      mailOptions.text = `Hey ${displayName || ''}! This email is sent
+      to you by${APP_NAME}.
+      <br>
+      our messenger is on the way,
+      please use the conformation QR code 
+      <img src="${QrLink}" >`;
+      await mailTransport.sendMail(mailOptions);
+      console.log('New welcome email sent to:', email);
+      //return 1;
+    }
+    
+    
