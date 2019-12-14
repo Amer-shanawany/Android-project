@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,7 +69,7 @@ import static com.ap.fietskorier.Constants.SOURCE_LATLNG;
 
 
 public class SearchPackage extends AppCompatActivity
-        implements OnMapReadyCallback {
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private static final String TAG = "SearchPackage";
     private boolean mLocationPermissionsGranted=false ;
     private GoogleMap mMap;
@@ -78,7 +79,7 @@ public class SearchPackage extends AppCompatActivity
     private static final float DEFAULT_ZOOM = 13f;
 
     private final LinkedList<Package> myDataset = new LinkedList<Package>();
-
+    private final LinkedList<Marker> myMarkers = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +134,8 @@ public class SearchPackage extends AppCompatActivity
 
         getDeviceLocation();
         getPackagesFirebase();
+        mMap.setOnMarkerClickListener(this);
+
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
@@ -193,10 +196,17 @@ public class SearchPackage extends AppCompatActivity
                                         addPackage.setPickupQR(document.getDocument().getString(PICKUP_QR_URL));
                                         //addPackage.setSource_latlng(document.getDocument().getGeoPoint(SOURCE_GEO));
                                         Log.d(TAG, "LATLNGXX"+document.getDocument().getGeoPoint(SOURCE_GEO).toString());
-                                        LatLng temp = new LatLng(document.getDocument().getGeoPoint(SOURCE_GEO).getLatitude(),document.getDocument().getGeoPoint(SOURCE_GEO).getLongitude());
-                                        addPackage.setSource_latlng(temp);
-                                        mMap.addMarker(new MarkerOptions().position(temp).title("Package "+index));
-                                        Log.d(TAG, temp.toString());
+                                        LatLng tempPosition = new LatLng(document.getDocument().getGeoPoint(SOURCE_GEO).getLatitude(),document.getDocument().getGeoPoint(SOURCE_GEO).getLongitude());
+                                        addPackage.setSource_latlng(tempPosition);
+                                        //Marker e = new Marker();
+                                        Marker tempMarker = mMap.addMarker( new MarkerOptions().position(tempPosition).title("Package "+index)
+                                        .snippet("to: "+document.getDocument().getString(DESTINATION_ADDRESS)));
+                                        tempMarker.setTag(index);
+                                        //mMap.addMarker(new MarkerOptions().position(tempPosition).title("Package "+index));
+                                        //mMap.addMarker(tempMarker);
+                                        myMarkers.add(tempMarker);
+
+                                        Log.d(TAG, tempPosition.toString());
                                         //Todo: add isPicked & is delivered flags
                                         myDataset.add(addPackage);
                                         //myAdapter.notifyDataSetChanged();
@@ -210,8 +220,35 @@ public class SearchPackage extends AppCompatActivity
 
         }
 
-
-
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.d(TAG, "onMarkerClick: "+marker.getTag());
+        Intent i = new Intent(SearchPackage.this,ViewPackage.class);
+        //i.putExtra(PACKAGE_ID,marker.getTag().toString());
+        Bundle extras = new Bundle();
+        Package myPackage =  myDataset.get((int)marker.getTag());
+        extras.putString("ID",myPackage.getPackageID());
+        extras.putString("SOURCE",myPackage.getOwnerAddress());
+        extras.putString("DESTINATION", myPackage.getDeliveryAddress());
+        extras.putString("EMAIL", myPackage.getEmailDestination());
+        extras.putString("QR", myPackage.getPickupQR());
+        /**
+         *
+         extras.putString("ID",myPackage.getPackageID());
+         extras.putString("SOURCE", myPackage.getOwnerAddress());
+         extras.putString("DESTINATION", myPackage.getDeliveryAddress());
+         extras.putString("EMAIL", myPackage.getEmailDestination());
+         extras.putString("QR", myPackage.getPickupQR());
+         *  String packageId = extras.getString("ID");
+         *         String packageSourceAddress = extras.getString("SOURCE");
+         *         String packageDestinationAddress = extras.getString("DESTINATION");
+         *         String packageDestinationEmail = extras.getString("EMAIL");
+         *         String packagePickupQRCode = extras.getString("QR");
+         * */
+        i.putExtras(extras);
+        //startActivity(i);
+        return false;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
