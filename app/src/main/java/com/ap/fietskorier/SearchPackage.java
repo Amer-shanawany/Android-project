@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import android.Manifest;
@@ -130,9 +131,30 @@ public class SearchPackage extends AppCompatActivity
 
         //Todo: here !  Get the data from Firebase and then draw the markers
 
-
+        getDeviceLocation();
         getPackagesFirebase();
+        if (mLocationPermissionsGranted) {
+            getDeviceLocation();
 
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+//
+//            mGps.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d(TAG, "onClick: clicked gps icon");
+//                    getDeviceLocation();
+//                }
+//            });
+
+            hideSoftKeyboard();
+        }
 
 //        LatLng sydney = new LatLng(-33.852, 151.211);
 //        googleMap.addMarker(new MarkerOptions().position(sydney)
@@ -356,4 +378,41 @@ public class SearchPackage extends AppCompatActivity
 //        }
 //        return false;
 //    }
+
+    public void getDeviceLocation(){
+        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(mLocationPermissionsGranted){
+
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location!");
+                            Location currentLocation = (Location) task.getResult();
+                            if(currentLocation !=null){
+                                moveCamera(new LatLng(currentLocation.getLatitude(),
+                                                currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM);}// ,"My Location",myLocationMarker
+
+                        }else{
+                            Log.d(TAG, "onComplete: current location is null");
+                            Toast.makeText(SearchPackage.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }catch (SecurityException e){
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        }
+    }
+
+    public void hideSoftKeyboard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
 }

@@ -29,6 +29,7 @@ import android.widget.Button;
 
 import java.util.LinkedList;
 
+import static com.ap.fietskorier.Constants.DELIVERER_ID;
 import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
@@ -96,7 +97,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
 
-        packages.whereEqualTo("Owner ID",user.getUser_id()) //TODO ADD A DELIVERER ID IN THE FIREBASE!!!
+        packages.whereEqualTo(DELIVERER_ID,user.getUser_id()) //TODO ADD A DELIVERER ID IN THE FIREBASE!!!
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,

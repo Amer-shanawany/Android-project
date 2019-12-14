@@ -85,6 +85,7 @@ import androidmads.library.qrgenearator.QRGSaver;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
+import static com.ap.fietskorier.Constants.DELIVERER_ID;
 import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
 import static com.ap.fietskorier.Constants.DESTINATION_GEO;
@@ -95,7 +96,9 @@ import static com.ap.fietskorier.Constants.FINE_LOCATION;
 import static com.ap.fietskorier.Constants.IS_DELIVERED;
 import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+import static com.ap.fietskorier.Constants.OWNER_ID;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.Constants.PACKAGE_ID;
 import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
 import static com.ap.fietskorier.Constants.PRICE;
 import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
@@ -393,8 +396,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             //todo: add the strings to the constants.JAVA
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
-            dataToSave.put("Owner ID",user.getUser_id());
-            dataToSave.put("Package ID",mDocRef.getId());
+            dataToSave.put(OWNER_ID,user.getUser_id());
+            dataToSave.put(PACKAGE_ID,mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
             dataToSave.put(SOURCE_GEO, geoSource);
             dataToSave.put(DESTINATION_GEO, geoSource);
@@ -413,7 +416,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
             dataToSave.put(IS_PICKED,false);
             dataToSave.put(IS_DELIVERED,false);
-
+            dataToSave.put(DELIVERER_ID,null);
             GenerateQR();
 
             //dataToSave.put(PICKUP_QR_URL, uri);

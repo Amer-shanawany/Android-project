@@ -14,7 +14,8 @@ public class Constants {
     public static final String USERS_COLLECTION = "users";
     public static final String PACKAGES_COLLECTIONS = "packages";
     public static  final String OWNER_ID ="Owner ID" ;
-    public static final String PACKAGE_ID=       "Package ID";
+    public static final String DELIVERER_ID = "Deliverer ID";
+    public static final String PACKAGE_ID="Package ID";
     public static final String PRICE =    "Price";
     public static final String DISTANCE =  "Distance";
     public static final String DESTINATION_EMAIL =  "Destination Email";
