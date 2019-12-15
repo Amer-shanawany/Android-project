@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import static com.ap.fietskorier.Constants.DELIVERER_ID;
 import static com.ap.fietskorier.Constants.PERMISSIONS_REQUEST_ENABLE_CAMERA;
 
 public class DeliverPackage extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class DeliverPackage extends AppCompatActivity {
         String packageSourceAddress = extras.getString("SOURCE");
         String packageDestinationAddress = extras.getString("DESTINATION");
         String packageDestinationEmail = extras.getString("EMAIL");
+        String delivererID = extras.getString(DELIVERER_ID);
         //String packagePickupQRCode = extras.getString("QR");
 
         TextView packageIden = findViewById(R.id.packageID);
@@ -57,9 +59,9 @@ public class DeliverPackage extends AppCompatActivity {
                 Bundle extras = new Bundle();
                 Intent deliveryIntent = new Intent(DeliverPackage.this, QrReader.class);
                 //TODO hier de goede variabelen zetten
-                extras.putString("PACKAGEID", "0O2oM4npunA4tRhYDIvI");
+                extras.putString("PACKAGEID", packageId);
                 extras.putString("PICKUPCODE", "#@&"); //zo laten staan!!!
-                extras.putString("DELIVERYCODE", "0O2oM4npunA4tRhYDIv_");
+                extras.putString("DELIVERYCODE", packageId+delivererID);
 
                 deliveryIntent.putExtras(extras);
                 startActivity(deliveryIntent);

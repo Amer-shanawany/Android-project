@@ -36,13 +36,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
+import static com.ap.fietskorier.Constants.IS_DELIVERED;
+import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
 import static com.ap.fietskorier.Constants.PACKAGE_ID;
+import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
 import static com.ap.fietskorier.Constants.PRICE;
-import static com.ap.fietskorier.add_package.DESTINATION_ADDRESS;
-import static com.ap.fietskorier.add_package.PICKUP_QR_URL;
-import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
+import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
+
 
 public class ShipmentActivity extends AppCompatActivity {
 
@@ -157,14 +160,18 @@ public class ShipmentActivity extends AppCompatActivity {
                                         addPackage.setDeliveryAddress(document.getDocument().getString(DESTINATION_ADDRESS));
                                         addPackage.setOwnerAddress(document.getDocument().getString(SOURCE_ADDRESS));
                                         addPackage.setPickupQR(document.getDocument().getString(PICKUP_QR_URL));
+                                        addPackage.setDelivered(document.getDocument().getBoolean(IS_DELIVERED));
+                                        addPackage.setPicked(document.getDocument().getBoolean(IS_PICKED));
+                                        //Todo: add isPicked & is delivered flags
                                         myDataset.add(addPackage);
                                         myAdapter.notifyDataSetChanged();}
 
                                     break;
                                 case MODIFIED:
                                         Log.d(TAG, "Modified Package: " + document.getDocument().getData());
+                                        //TODO : GET THE UPDATE FROM THE DATABASE
 
-
+                                    myAdapter.notifyDataSetChanged();
                                     break;
                                 case REMOVED:
                                     Log.d(TAG, "Removed Package: " + document.getDocument().getData());

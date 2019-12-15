@@ -5,17 +5,55 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.AlertDialog;
+import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static com.ap.fietskorier.Constants.DELIVERER_ID;
+import static com.ap.fietskorier.Constants.IS_DELIVERED;
+import static com.ap.fietskorier.Constants.IS_PICKED;
+import static com.ap.fietskorier.Constants.OWNER_ID;
+import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.Constants.PACKAGE_ID;
 import static com.ap.fietskorier.Constants.PERMISSIONS_REQUEST_ENABLE_CAMERA;
+import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
 
 /**
  * Created by akhil on 28-12-16.
@@ -30,11 +68,17 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
     String packageID;
     String pickupCode;
     String deliveryCode;
+    User user;
+    Bitmap bitmap;
+
+    private DocumentReference mDocRef;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
         // Here, thisActivity is the current activity
+
+        user = ((UserClient)(getApplicationContext())).getUser();
 
         if (ContextCompat.checkSelfPermission(QrReader.this,
                 Manifest.permission.CAMERA)
@@ -54,9 +98,15 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
 
         Bundle extras = getIntent().getExtras();
         packageID = extras.getString("PACKAGEID");
-        pickupCode = extras.getString("PICKUPCODE");
-        deliveryCode = extras.getString("DELIVERYCODE");
-
+        mDocRef   = FirebaseFirestore.getInstance()
+                .collection(PACKAGES_COLLECTIONS)
+                .document(packageID);
+        if (extras.getString("PICKUPCODE")!=null){
+            pickupCode = extras.getString("PICKUPCODE");
+        }
+        if( extras.getString("DELIVERYCODE")!=null) {
+            deliveryCode = extras.getString("DELIVERYCODE");
+        }
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
 
@@ -82,13 +132,23 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
         Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
         String scannedCode = rawResult.getText();
-        if (scannedCode.contains(pickupCode)) {  //SO WEIRD BUT OTHERWISE IT DOESN'T WORK!!!
+        if (scannedCode.contentEquals(pickupCode)) {  //SO WEIRD BUT OTHERWISE IT DOESN'T WORK!!!
             Alert("You succesfully picked up package " + packageID + ".");
+                //todo: 1 write ispicked to firestore Done
+            //          2 add deliverer Id to firestore
+            //          3 generate Qr code  packageID + delivererId
+            //          4 send email through nodemailer
+
+            saveFirestore(IS_PICKED,true,user.getUser_id());
 
         }
-        else if (scannedCode.contains(deliveryCode)) {
+        else if (scannedCode.contentEquals(deliveryCode)) {
             Alert("You succesfully delivered package "+ packageID + ".");
-
+                //todo add balcance  -- -- -- show balance !!
+                 //  write is delivered to firestore
+                    //delete delivery !
+                          // write email to the owner your package is delivered !
+                saveFirestore(IS_DELIVERED,true,null);
         }
         else Alert("This is not valid code for package "+ packageID + ".");
 
@@ -107,15 +167,7 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
                         // back to previous activity
                         finish();
                     }
-                })
-                //.setNegativeButton("Scan Again", new DialogInterface.OnClickListener() {
-                //    public void onClick(DialogInterface dialog, int id) {
-                //        // User cancelled the dialog
-                //       // If you would like to resume scanning, call this method below:
-                //       mScannerView.resumeCameraPreview(QrReader.this);
-                //   }
-                //   })
-                ;
+                });
         // Create the AlertDialog object and return it
         builder.create().show();
     }
@@ -140,4 +192,133 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
             // permissions this app might request.
         }
     }
+
+    public void saveFirestore(String data,boolean flag, String otherdata) {
+
+            Map<String, Object> dataToSave = new HashMap<>();
+            if(otherdata!=null){
+                dataToSave.put(DELIVERER_ID,otherdata);
+            }
+
+            switch (data){
+                case IS_DELIVERED:
+                dataToSave.put(IS_DELIVERED,flag);
+
+                break;
+                case IS_PICKED:
+                dataToSave.put(IS_PICKED,flag);
+                    GenerateQR();
+                break;
+            }
+
+        mDocRef.update(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Document has been saved! ");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Document was not saved!", e);
+                }
+            });
+        }
+
+    //FireCloud reference
+    // Create a storage reference from our app
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+
+    // Create a storage reference from our app
+    StorageReference storageRef = storage.getReference();
+
+    // Create a reference to "mountains.jpg"
+    // Here you give the image NAME
+    StorageReference mountainsRef ;
+    public void GenerateQR(){
+
+        String DownloadURL = "";
+        mountainsRef  = storageRef.child("QRdelivery/"+packageID+".jpg");
+        //qrGenerator(view,mDocRef.getId());
+        String inputValue = packageID+user.getUser_id();
+
+
+
+        if (inputValue.length() > 0) {
+            WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            Display display = manager.getDefaultDisplay();
+            Point point = new Point();
+            display.getSize(point);
+            int width = point.x;
+            int height = point.y;
+            int smallerDimension = width < height ? width : height;
+            smallerDimension = smallerDimension * 3 / 4;
+            QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, smallerDimension);
+            try {
+                bitmap = qrgEncoder.encodeAsBitmap();
+                //qrImage.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+                //this upoad method, save QR-images to Firebase Cloud Storage
+                UploadTask uploadTask = mountainsRef.putBytes(data);
+
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        // ...
+                        //Log.d(TAG, )
+                        mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Uri downloadUrl = uri;
+                                Log.d(TAG, "OK");
+                                Log.d(TAG, downloadUrl.toString());
+                                String url = downloadUrl.toString();
+
+                                //update firebase
+                                Map<String, Object> dataToSave = new HashMap<>();
+                                dataToSave.put(PICKUP_QR_URL, url);
+                                mDocRef.update(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Document has been saved! ");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Document was not saved!", e);
+                                    }
+                                });
+
+                               ////intent naar de geupdate lijst...
+                               //Intent intent = new Intent(add_package.this, ShipmentActivity.class);
+                               //startActivity(intent);
+                            }
+                        });
+                        //Log.d(TAG, "OK");
+                        //Log.d(TAG,taskSnapshot.getMetadata().getCustomMetadataKeys(""));
+                        //Log.d(TAG, link);
+                        //Log.d(TAG, mountainsRef.getDownloadUrl().toString());
+                    }
+                });
+                Log.d(TAG, "GenerateQR: is successfull");
+            } catch (WriterException e) {
+                Log.v(TAG, e.toString());
+
+            }
+        }else {
+
+
+            Log.d(TAG, "GenerateQR: Something went wrong");
+        }
+
+    }
+
 }

@@ -85,9 +85,26 @@ import androidmads.library.qrgenearator.QRGSaver;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
+import static com.ap.fietskorier.Constants.DELIVERER_ID;
+import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
+import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
+import static com.ap.fietskorier.Constants.DESTINATION_GEO;
+import static com.ap.fietskorier.Constants.DESTINATION_ID;
+import static com.ap.fietskorier.Constants.DESTINATION_LATLNG;
+import static com.ap.fietskorier.Constants.DISTANCE;
 import static com.ap.fietskorier.Constants.FINE_LOCATION;
+import static com.ap.fietskorier.Constants.IS_DELIVERED;
+import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+import static com.ap.fietskorier.Constants.OWNER_ID;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
+import static com.ap.fietskorier.Constants.PACKAGE_ID;
+import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
+import static com.ap.fietskorier.Constants.PRICE;
+import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
+import static com.ap.fietskorier.Constants.SOURCE_GEO;
+import static com.ap.fietskorier.Constants.SOURCE_ID;
+import static com.ap.fietskorier.Constants.SOURCE_LATLNG;
 
 public class add_package extends AppCompatActivity  implements OnMapReadyCallback  {
 
@@ -111,18 +128,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     EditText destination_Email =null;
     private double price=1;
     private   static String UID;
-    public static final String SOURCE_ID ="Source ID";
-    public static final String SOURCE_NAME="Source Name";
-    public static final String SOURCE_ADDRESS="Source Address";
-    public static final String SOURCE_LATLNG="Source LatLng";
-    public static final String DESTINATION_ID="Destination ID";
-    public static final String DESTINATION_NAME="Destination Name";
-    public static final String DESTINATION_ADDRESS="Destination Address";
-    public static final String DESTINATION_LATLNG="Destination LatLng";
-    public static final String SOURCE_GEO = "Source GeoPoint";
-    public static final String DESTINATION_GEO = "Destination GeoPoint";
-    public static final String PICKUP_QR_URL = "Pickup QR code download URL";
-
     //GeoApiContext context = new GeoApiContext.builder();
     private GeoPoint geoSource;
      private GeoPoint geoDestination;
@@ -310,7 +315,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
 
     }
 
-    private void getDeviceLocation(){
+    public void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -391,13 +396,15 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             //todo: add the strings to the constants.JAVA
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
-            dataToSave.put("Owner ID",user.getUser_id());
-            dataToSave.put("Package ID",mDocRef.getId());
+            dataToSave.put(OWNER_ID,user.getUser_id());
+            dataToSave.put(PACKAGE_ID,mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
-            //dataToSave.put(SOURCE_GEO, geoSource);
-            dataToSave.put("Price",price);
-            dataToSave.put("Distance",distance);
-            dataToSave.put("Destination Email",destination_Email.getText().toString());
+            dataToSave.put(SOURCE_GEO, geoSource);
+            dataToSave.put(DESTINATION_GEO, geoSource);
+
+            dataToSave.put(PRICE,price);
+            dataToSave.put(DISTANCE,distance);
+            dataToSave.put(DESTINATION_EMAIL,destination_Email.getText().toString());
             Log.d(TAG, "saveFirestore: "+destination_Email);
             //dataToSave.put(DESTINATION_NAME,      destination_Place.getName());
             dataToSave.put(DESTINATION_LATLNG,    destination_Place.getLatLng());
@@ -407,9 +414,9 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_LATLNG,     source_Place.getLatLng());
             dataToSave.put(SOURCE_ID ,        source_Place.getId());
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
-
-
-
+            dataToSave.put(DELIVERER_ID,null);
+            dataToSave.put(IS_DELIVERED,false);
+            dataToSave.put(IS_PICKED,false);
             GenerateQR();
 
             //dataToSave.put(PICKUP_QR_URL, uri);
@@ -464,7 +471,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
 
     }
 
-    private void getLocationPermission(){
+    public void getLocationPermission(){
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -511,7 +518,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         }
     }
 
-    private void hideSoftKeyboard(){
+    public void hideSoftKeyboard(){
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -691,7 +698,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     StorageReference storageRef = storage.getReference();
 
     // Create a reference to "mountains.jpg"
-    StorageReference mountainsRef = storageRef.child("qrpackages/"+mDocRef.getId()+".jpg");
+    // Here you give the image NAME
+    StorageReference mountainsRef = storageRef.child("QRpickup/"+mDocRef.getId()+".jpg");
 
     // Create a reference to 'images/mountains.jpg'
     //StorageReference mountainImagesRef = storageRef.child("qrpackages/mountains.jpg");
@@ -702,7 +710,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         String DownloadURL = "";
 
         //qrGenerator(view,mDocRef.getId());
-         String inputValue = mDocRef.getId();
+         String inputValue = mDocRef.getId()+user.getUser_id();
 
 
 
