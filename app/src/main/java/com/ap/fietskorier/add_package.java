@@ -414,7 +414,9 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_LATLNG,     source_Place.getLatLng());
             dataToSave.put(SOURCE_ID ,        source_Place.getId());
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
+            dataToSave.put(DELIVERER_ID,null);
             dataToSave.put(IS_DELIVERED,false);
+            dataToSave.put(IS_PICKED,false);
             GenerateQR();
 
             //dataToSave.put(PICKUP_QR_URL, uri);
@@ -696,7 +698,8 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     StorageReference storageRef = storage.getReference();
 
     // Create a reference to "mountains.jpg"
-    StorageReference mountainsRef = storageRef.child("qrpackages/"+mDocRef.getId()+".jpg");
+    // Here you give the image NAME
+    StorageReference mountainsRef = storageRef.child("QRpickup/"+mDocRef.getId()+".jpg");
 
     // Create a reference to 'images/mountains.jpg'
     //StorageReference mountainImagesRef = storageRef.child("qrpackages/mountains.jpg");
@@ -707,7 +710,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         String DownloadURL = "";
 
         //qrGenerator(view,mDocRef.getId());
-         String inputValue = mDocRef.getId();
+         String inputValue = mDocRef.getId()+user.getUser_id();
 
 
 

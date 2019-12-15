@@ -56,6 +56,7 @@ import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
 import static com.ap.fietskorier.Constants.ERROR_DIALOG_REQUEST;
 import static com.ap.fietskorier.Constants.FINE_LOCATION;
+import static com.ap.fietskorier.Constants.IS_DELIVERED;
 import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.ap.fietskorier.Constants.OWNER_ID;
@@ -179,16 +180,18 @@ public class SearchPackage extends AppCompatActivity
                         }
                         int index = 0;
                         for (DocumentChange document : snapshots.getDocumentChanges()) {
-                                    index++;
+                                    if(document.getDocument().getBoolean(IS_PICKED)!=true
+                                    && document.getDocument().getBoolean(IS_DELIVERED)!=true){
                                     Log.d("FireBase", "Getting a package " + document.getDocument().getData());
 
                                     if(document.getDocument().getData().get(Constants.PRICE)!=null){
-                                        Package addPackage = new Package(user,
+                                        Package addPackage = new Package(null,
                                                 document.getDocument().getString(SOURCE_ADDRESS),
                                                 document.getDocument().getString(DESTINATION_ADDRESS),
                                                 document.getDocument().getString(DESTINATION_EMAIL),
                                                 document.getDocument().getDouble(Constants.PRICE)
                                         );
+                                        addPackage.setUser_id(document.getDocument().getString(OWNER_ID));
                                         addPackage.setPackageID(document.getDocument().getString(PACKAGE_ID));
                                         addPackage.setEmailDestination(document.getDocument().getString(DESTINATION_EMAIL));
                                         addPackage.setDeliveryAddress(document.getDocument().getString(DESTINATION_ADDRESS));
@@ -205,7 +208,7 @@ public class SearchPackage extends AppCompatActivity
                                         //mMap.addMarker(new MarkerOptions().position(tempPosition).title("Package "+index));
                                         //mMap.addMarker(tempMarker);
                                         myMarkers.add(tempMarker);
-
+                                        index++;
                                         Log.d(TAG, tempPosition.toString());
                                         //Todo: add isPicked & is delivered flags
                                         myDataset.add(addPackage);
@@ -214,6 +217,7 @@ public class SearchPackage extends AppCompatActivity
 
                             }
                         }
+                    }
 
 
                 });
@@ -226,12 +230,14 @@ public class SearchPackage extends AppCompatActivity
         Intent i = new Intent(SearchPackage.this,PickupPackage.class);
         //i.putExtra(PACKAGE_ID,marker.getTag().toString());
         Bundle extras = new Bundle();
-        Package myPackage =  myDataset.get((int)marker.getTag());
-        extras.putString("ID",myPackage.getPackageID());
-        extras.putString("SOURCE",myPackage.getOwnerAddress());
-        extras.putString("DESTINATION", myPackage.getDeliveryAddress());
-        extras.putString("EMAIL", myPackage.getEmailDestination());
-        extras.putString("QR", myPackage.getPickupQR());
+         Package myPackage =  myDataset.get((int)marker.getTag());
+
+         extras.putString("ID",myPackage.getPackageID());
+         extras.putString("SOURCE",myPackage.getOwnerAddress());
+         extras.putString("DESTINATION", myPackage.getDeliveryAddress());
+         extras.putString("EMAIL", myPackage.getEmailDestination());
+         extras.putString("QR", myPackage.getPickupQR());
+         extras.putString(OWNER_ID,myPackage.getUser_id());
         /**
          *
          extras.putString("ID",myPackage.getPackageID());

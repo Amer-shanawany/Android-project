@@ -32,9 +32,27 @@ public class Package {
     private String pickupQRUrl;
     private String ownerAddress;
     private String deliveryAddress;
-
+    private String user_id;
     private User ownerUser;//owner / sender
     private User delivererUser = null;
+
+    public String getDelivererID() {
+        return delivererID;
+    }
+
+    public void setDelivererID(String delivererID) {
+        this.delivererID = delivererID;
+    }
+
+    private String delivererID;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     private String emailDestination;
 
