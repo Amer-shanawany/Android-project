@@ -4,12 +4,14 @@ package com.ap.fietskorier;
 import android.content.Context;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +42,21 @@ import static com.ap.fietskorier.Constants.USERS_COLLECTION;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //SHARED PREFS
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String LOGIN = "login";
+    private static final String PASSWORD = "password";
+    private static final String AUTOFILL = "autofill";
+
+    String email;
+    String pwd;
+    Boolean checkbox;
+
     EditText EmailID,Password;
     Button Btn_singIn;
     TextView tvSignUp;
     FirebaseAuth mFirebaseAuth;
+    CheckBox checkbox_autofill;
     public User user;
 
     private static String TAG = "LoginActivity";
@@ -66,6 +79,10 @@ public class LoginActivity extends AppCompatActivity {
         Btn_singIn = findViewById(R.id.button_signIn);
         tvSignUp = findViewById(R.id.no_account_signUp);
         btn_fastSingIn = findViewById(R.id.button_fastlogin);
+        checkbox_autofill = findViewById(R.id.checkbox_autofill);
+
+        loadData();
+        updateViews();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
 
@@ -89,10 +106,9 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-                    Intent i = new Intent(LoginActivity.this,HomeActivity.class );
 
 
-
+                    Intent i = new Intent(LoginActivity.this,ShipmentActivity.class );
 
                     startActivity(i);
                  }else{Toast.makeText(LoginActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
@@ -102,8 +118,11 @@ public class LoginActivity extends AppCompatActivity {
         Btn_singIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String email = EmailID.getText().toString();
-                    String pwd = Password.getText().toString();
+
+                    email = EmailID.getText().toString();
+                    pwd = Password.getText().toString();
+                    checkbox = checkbox_autofill.isChecked();
+
                     if (email.isEmpty())
                     {
                         EmailID.setError("Please enter email id");
@@ -155,8 +174,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                         mDocRef.set(dataToSave);
 
+                                        //saveData();
+
                                         startActivity(intToHome);}else{
                                         Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();
+
+
                                     }
 
                                 }
@@ -183,8 +206,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //EmailID.setText("jonas.baert@icloud.com");
                 //Password.setText("123456");
-                String email = "meeplemaker@gmail.com";
-                String pwd = "123456";
+                email = "meeplemaker@gmail.com";
+                pwd = "123456";
+
                 mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -210,6 +234,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                     startActivity(intToHome);}else{
                                     Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();
+
+//                                    saveData(email,pwd,true);
                                 }
 
                             }
@@ -221,4 +247,28 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(LOGIN, email);
+        editor.putString(PASSWORD, pwd);
+        editor.putBoolean(AUTOFILL, checkbox);
+
+        editor.apply();
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+
+        email = sharedPreferences.getString( LOGIN, "");
+        pwd = sharedPreferences.getString(PASSWORD, "");
+        checkbox = sharedPreferences.getBoolean(AUTOFILL, false);
+    }
+
+    public void updateViews() {
+        EmailID.setText(email);
+        Password.setText(pwd);
+        checkbox_autofill.setChecked(checkbox);
+    }
 }
