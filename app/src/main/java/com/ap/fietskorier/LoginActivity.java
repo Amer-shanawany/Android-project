@@ -82,7 +82,11 @@ public class LoginActivity extends AppCompatActivity {
         checkbox_autofill = findViewById(R.id.checkbox_autofill);
 
         loadData();
-        updateViews();
+
+        if (checkbox) {
+            updateViews();
+
+        }
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
 
@@ -106,15 +110,14 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
+                    //Intent i = new Intent(LoginActivity.this,ShipmentActivity.class );
+                    //startActivity(i);
 
-
-                    Intent i = new Intent(LoginActivity.this,ShipmentActivity.class );
-
-                    startActivity(i);
                  }else{Toast.makeText(LoginActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
                 }
             }
         };
+
         Btn_singIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this,"Login Error, Please login again", Toast.LENGTH_SHORT).show();
                                 }else{
                                     if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
-                                    Intent intToHome = new Intent(LoginActivity.this,HomeActivity.class);
 
+                                    Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
 
                                         User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());
                                         ((UserClient)(getApplicationContext())).setUser(user);
@@ -174,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         mDocRef.set(dataToSave);
 
-                                        //saveData();
+                                        saveData();
 
                                         startActivity(intToHome);}else{
                                         Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();
