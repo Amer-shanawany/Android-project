@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static String TAG = "LoginActivity";
     private @ServerTimestamp Date   timeStamp;
-    Button btn_fastSingIn;
 
 // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
@@ -78,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         Password =findViewById(R.id.Password_singIn);
         Btn_singIn = findViewById(R.id.button_signIn);
         tvSignUp = findViewById(R.id.no_account_signUp);
-        btn_fastSingIn = findViewById(R.id.button_fastlogin);
         checkbox_autofill = findViewById(R.id.checkbox_autofill);
 
         loadData();
@@ -200,50 +198,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent  intSignUp = new Intent(LoginActivity.this,SignupActivity.class);
                 startActivity(intSignUp);
-
-            }
-        });
-
-        btn_fastSingIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //EmailID.setText("jonas.baert@icloud.com");
-                //Password.setText("123456");
-                email = "meeplemaker@gmail.com";
-                pwd = "123456";
-
-                mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(!task.isSuccessful()){
-                                Toast.makeText(LoginActivity.this,"Login Error, Please login again", Toast.LENGTH_SHORT).show();
-                            }else{
-                                if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
-                                    Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
-                                    User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());
-
-                                    ((UserClient)(getApplicationContext())).setUser(user);
-                                    //Create a User in the DataBase
-                                    //String UID = mFirebaseAuth.getCurrentUser().getUid() ;
-                                    String UID = user.getUser_id();
-                                    String Email = user.getEmail();
-                                    DocumentReference mDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(UID);
-                                    //String Email = mFirebaseAuth.getCurrentUser().getEmail();
-                                    Map<String,Object> dataToSave = new HashMap<>();
-                                    //dataToSave.put("UID",UID);
-                                    dataToSave.put("Email",Email);
-
-                                    mDocRef.set(dataToSave);
-
-                                    startActivity(intToHome);}else{
-                                    Toast.makeText(LoginActivity.this,"please verify your email first and try again",Toast.LENGTH_LONG).show();
-
-//                                    saveData(email,pwd,true);
-                                }
-
-                            }
-                        }
-                    });
 
             }
         });
