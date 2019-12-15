@@ -178,7 +178,7 @@ public class Package {
     }
 
     public boolean isPicked() {
-        return true;
+        return isPicked;
     }
 
     public void setPicked(boolean picked) {
