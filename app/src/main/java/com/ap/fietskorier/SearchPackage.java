@@ -18,7 +18,16 @@ public class SearchPackage extends AppCompatActivity {
         btn_packageDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intentToPickupPackage = new Intent(SearchPackage.this, PickupPackage.class);
+
+                Bundle extras = new Bundle();
+                extras.putString("ID", "nog aan te passen");
+                extras.putString("SOURCE", "nog aan te passen");
+                extras.putString("DESTINATION", "nog aan te passen");
+                extras.putString("EMAIL", "nog aan te passen");
+                extras.putString("QR", "nog aan te passen");
+                intentToPickupPackage.putExtras(extras);
                 startActivity(intentToPickupPackage);
             }
         });

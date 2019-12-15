@@ -174,7 +174,7 @@ public class DeliveryActivity extends AppCompatActivity {
                 extras.putString("SOURCE", myPackage.getOwnerAddress());
                 extras.putString("DESTINATION", myPackage.getDeliveryAddress());
                 extras.putString("EMAIL", myPackage.getEmailDestination());
-                extras.putString("QR", myPackage.getPickupQR());
+                //extras.putString("QR", myPackage.getPickupQR());
                 i.putExtras(extras);
                 startActivity(i);
                 //Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();

@@ -199,11 +199,10 @@ public class ShipmentActivity extends AppCompatActivity {
         //adapter
         myAdapter = new PackageAdapter(this, myDataset, new PackageAdapter.OnItemClickListener() {
             @Override
+
             public void onItemClick(Package myPackage) {
                 Intent i = new Intent(ShipmentActivity.this,ViewPackage.class);
                 Bundle extras = new Bundle();
-                //extras.putParcelable(EXTRA_PACKAGE, myPackage);
-
                 extras.putString("ID",myPackage.getPackageID());
                 extras.putString("SOURCE", myPackage.getOwnerAddress());
                 extras.putString("DESTINATION", myPackage.getDeliveryAddress());
@@ -211,7 +210,6 @@ public class ShipmentActivity extends AppCompatActivity {
                 extras.putString("QR", myPackage.getPickupQR());
                 i.putExtras(extras);
                 startActivity(i);
-                //Toast.makeText(getBaseContext(),myPackage.getPackageID(), Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(myAdapter);
