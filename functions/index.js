@@ -230,7 +230,7 @@ exports.onDataAdded = functions.database.ref('/emails/{sessionId}').onCreate(fun
 // Listen for changes in all documents in the 'users' collection
 exports.useWildcard = functions.firestore
     .document('packages/{packageID}')
-    .onWrite((change,context) => {
+    .onUpdate((change,context) => {
       // If we set `/users/marie` to {name: "Marie"} then
       // context.params.userId == "marie"
       // ... and ...
@@ -245,15 +245,31 @@ exports.useWildcard = functions.firestore
          console.log(doc.data());*/
         const jsonObj = doc.data();
         //change this line into Destination
-         const emailRx = jsonObj["Destination Email"] ;
-         console.log(emailRx);
+        const IS_PICKED = jsonObj["Is Picked"];
+        const IS_DELIVERED = jsonObj["Is Delivered"];
+        const OWNER_EMAIL = jsonObj["Owner Email"]
+        const DESTINATION_EMAIL = jsonObj["Destination Email"] ;
         const customer = "dear customer";
+        const DELIVERY_QR_URL =jsonObj["Delivery QR code download URL"];
 
-         const QrRx = jsonObj["Pickup QR code download URL"]
-        console.log(QrRx);
+        if(IS_PICKED===true&&IS_DELIVERED===false){
+          console.log(1);
+           await sendQrCode(DESTINATION_EMAIL,customer,DELIVERY_QR_URL);
+           return null;
+        }else if(IS_DELIVERED===true&&IS_PICKED===true){
+          console.log(2);
+          await PackageReceived(OWNER_EMAIL,customer);
+          return null;
+        }else
+        return null;
+         
+        
+        // console.log(DESTINATION_EMAIL);
+        
+         //const QrRx = jsonObj["Pickup QR code download URL"]
+        //console.log(DELIVERY_QR_URL);
  
-            console.log(doc);
-            return await sendQrCode(emailRx,customer,QrRx);
+            //console.log(doc);
        })
        .catch(err=>{
          console.log('Error getting the document', err);
@@ -273,10 +289,31 @@ exports.useWildcard = functions.firestore
       to you by${APP_NAME}.
       <br>
       our messenger is on the way,
-      please use the conformation QR code 
-      <img src="${QrLink}" >`;
+      please use the conformation QR code`;
+      mailOptions.html = `<img src="${QrLink}">
+      <br>
+      <a href="${QrLink}">click this link if you can't see the QR code</a>`;
       await mailTransport.sendMail(mailOptions);
       console.log('New welcome email sent to:', email);
+      //return 1;
+    }
+
+
+    async function PackageReceived(email, displayName) {
+      const mailOptions = {
+        from: `${APP_NAME} <noreply@fietskoerier.ap.be>`,
+        to: email,
+      };
+    
+      // The user subscribed to the newsletter.
+      mailOptions.subject = `${APP_NAME}! - Your Package is delivered`;
+      mailOptions.text = `Hey ${displayName || ''}! 
+      This email is sent to you by ${APP_NAME}.
+
+      Your package has reached its destination
+      Thank you for using our service`;
+      await mailTransport.sendMail(mailOptions);
+      //console.log('New welcome email sent to:', email);
       //return 1;
     }
     

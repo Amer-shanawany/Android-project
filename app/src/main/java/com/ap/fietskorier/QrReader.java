@@ -47,6 +47,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static com.ap.fietskorier.Constants.DELIVERER_ID;
+import static com.ap.fietskorier.Constants.DELIVERY_QR_URL;
 import static com.ap.fietskorier.Constants.IS_DELIVERED;
 import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.OWNER_ID;
@@ -284,7 +285,7 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
 
                                 //update firebase
                                 Map<String, Object> dataToSave = new HashMap<>();
-                                dataToSave.put(PICKUP_QR_URL, url);
+                                dataToSave.put(DELIVERY_QR_URL, url);
                                 mDocRef.update(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
