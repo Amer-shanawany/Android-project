@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/packageID" />
 
     <TextView
-        android:id="@+id/deliveryAddress"
+        android:id="@+id/destinationEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"

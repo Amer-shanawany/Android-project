@@ -71,7 +71,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intToAddPackages = new Intent(HomeActivity.this,add_package.class);
                 startActivity(intToAddPackages);
-
             }
         });
 
@@ -92,8 +91,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

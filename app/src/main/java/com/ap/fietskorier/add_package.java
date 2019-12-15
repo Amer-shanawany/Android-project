@@ -414,9 +414,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(SOURCE_LATLNG,     source_Place.getLatLng());
             dataToSave.put(SOURCE_ID ,        source_Place.getId());
             dataToSave.put(SOURCE_ADDRESS,    source_Place.getAddress());
-            dataToSave.put(IS_PICKED,false);
             dataToSave.put(IS_DELIVERED,false);
-            dataToSave.put(DELIVERER_ID,null);
             GenerateQR();
 
             //dataToSave.put(PICKUP_QR_URL, uri);
