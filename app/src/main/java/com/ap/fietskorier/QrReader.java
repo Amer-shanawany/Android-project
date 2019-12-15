@@ -100,7 +100,7 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
 
     public void Alert(String messsage){
         AlertDialog.Builder builder = new AlertDialog.Builder(QrReader.this);
-        builder.setTitle("PACKAGED");
+        builder.setTitle("Packaged");
         builder.setMessage(messsage)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

@@ -147,7 +147,9 @@ public class Package {
     }
 
     public int getStatus() {
-        return R.drawable.ic_check_red;
+        if (isDelivered()) return R.drawable.ic_check_green;
+        else if (isPicked()) return R.drawable.ic_check_orange;
+        else return R.drawable.ic_check_red;
 
         //TODO RETURN THE APPROPRIATE STATUS!!!
     }
