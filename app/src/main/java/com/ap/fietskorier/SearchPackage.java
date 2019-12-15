@@ -223,7 +223,7 @@ public class SearchPackage extends AppCompatActivity
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d(TAG, "onMarkerClick: "+marker.getTag());
-        Intent i = new Intent(SearchPackage.this,ViewPackage.class);
+        Intent i = new Intent(SearchPackage.this,PickupPackage.class);
         //i.putExtra(PACKAGE_ID,marker.getTag().toString());
         Bundle extras = new Bundle();
         Package myPackage =  myDataset.get((int)marker.getTag());
@@ -246,7 +246,7 @@ public class SearchPackage extends AppCompatActivity
          *         String packagePickupQRCode = extras.getString("QR");
          * */
         i.putExtras(extras);
-        //startActivity(i);
+        startActivity(i);
         return false;
     }
 
