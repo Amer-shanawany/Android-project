@@ -76,6 +76,7 @@ public class MyProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String newEmail = textEmail.getText().toString();
+                email = newEmail;
                 String newName = textName.getText().toString();
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
