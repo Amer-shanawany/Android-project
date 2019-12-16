@@ -454,7 +454,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         }
     }
 
-
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
         // Get the SupportMapFragment and request notification when the map is ready to be used.
@@ -468,7 +467,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             geoApiContext = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_api_key))
                     .build();
-
         }
 
     }
@@ -599,7 +597,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                         //TODO: calculate better pricing !
                 //
                 price = distance*0.002;
-                priceTextView.setText("Price : "+ price+"$");
+                //priceTextView.setText("Price : "+ price+"$");
             }
 
             @Override
