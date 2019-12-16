@@ -184,7 +184,7 @@ public class SearchPackage extends AppCompatActivity
                                     && document.getDocument().getBoolean(IS_DELIVERED)!=true){
                                     Log.d("FireBase", "Getting a package " + document.getDocument().getData());
 
-                                    if(document.getDocument().getData().get(Constants.PRICE)!=null){
+                                    if(document.getDocument().getData().get(PACKAGE_ID)!=null){
                                         Package addPackage = new Package(null,
                                                 document.getDocument().getString(SOURCE_ADDRESS),
                                                 document.getDocument().getString(DESTINATION_ADDRESS),
