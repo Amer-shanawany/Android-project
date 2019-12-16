@@ -202,7 +202,7 @@ public class SearchPackage extends AppCompatActivity
                                         LatLng tempPosition = new LatLng(document.getDocument().getGeoPoint(SOURCE_GEO).getLatitude(),document.getDocument().getGeoPoint(SOURCE_GEO).getLongitude());
                                         addPackage.setSource_latlng(tempPosition);
                                         //Marker e = new Marker();
-                                        Marker tempMarker = mMap.addMarker( new MarkerOptions().position(tempPosition).title("Package "+index)
+                                        Marker tempMarker = mMap.addMarker( new MarkerOptions().position(tempPosition).title(document.getDocument().getString(PACKAGE_ID))
                                         .snippet("to: "+document.getDocument().getString(DESTINATION_ADDRESS)));
                                         tempMarker.setTag(index);
                                         //mMap.addMarker(new MarkerOptions().position(tempPosition).title("Package "+index));
