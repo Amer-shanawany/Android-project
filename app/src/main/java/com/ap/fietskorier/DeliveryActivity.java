@@ -136,6 +136,14 @@ public class DeliveryActivity extends AppCompatActivity {
                                 case MODIFIED:
                                     Log.d(TAG, "Modified Package: " + document.getDocument().getData());
 
+                                    for (Package pack : myDataset) {
+                                        if (pack.getPackageID().equals(document.getDocument().getString(PACKAGE_ID))) {
+                                            int i = myDataset.indexOf(pack);
+                                            myDataset.get(i).setPicked(document.getDocument().getBoolean(IS_PICKED));
+                                            myDataset.get(i).setDelivered(document.getDocument().getBoolean(IS_DELIVERED));
+                                            myAdapter.notifyDataSetChanged();
+                                        }
+                                    }
                                     myAdapter.notifyDataSetChanged();
                                     break;
                                 case REMOVED:
@@ -150,6 +158,7 @@ public class DeliveryActivity extends AppCompatActivity {
                                     }
                                     break;
                             }
+
                         }
 
                     }

@@ -34,7 +34,7 @@ public class Constants {
     public static final String SOURCE_GEO = "Source GeoPoint";
     public static final String DESTINATION_GEO = "Destination GeoPoint";
     public static final String PICKUP_QR_URL = "Pickup QR code download URL";
-
-
+    public static  final String DELIVERY_QR_URL ="Delivery QR code download URL";
+    public static final String OWNER_EMAIL = "Owner Email";
     //public static final String  =   "saveFirestore: "  ;
 }

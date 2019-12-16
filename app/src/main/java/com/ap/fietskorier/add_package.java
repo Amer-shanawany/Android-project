@@ -96,6 +96,7 @@ import static com.ap.fietskorier.Constants.FINE_LOCATION;
 import static com.ap.fietskorier.Constants.IS_DELIVERED;
 import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+import static com.ap.fietskorier.Constants.OWNER_EMAIL;
 import static com.ap.fietskorier.Constants.OWNER_ID;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
 import static com.ap.fietskorier.Constants.PACKAGE_ID;
@@ -397,6 +398,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             //dataToSave.put("QrBitmap",bitmap);
             //QRGen("Hi   ");
             dataToSave.put(OWNER_ID,user.getUser_id());
+            dataToSave.put(OWNER_EMAIL,user.getEmail());
             dataToSave.put(PACKAGE_ID,mDocRef.getId());
             //dataToSave.put(SOURCE_NAME,       source_Place.getName());
             dataToSave.put(SOURCE_GEO, geoSource);
