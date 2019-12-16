@@ -160,8 +160,10 @@ public class ShipmentActivity extends AppCompatActivity {
                                         addPackage.setDeliveryAddress(document.getDocument().getString(DESTINATION_ADDRESS));
                                         addPackage.setOwnerAddress(document.getDocument().getString(SOURCE_ADDRESS));
                                         addPackage.setPickupQR(document.getDocument().getString(PICKUP_QR_URL));
-                                        addPackage.setDelivered(document.getDocument().getBoolean(IS_DELIVERED));
-                                        addPackage.setPicked(document.getDocument().getBoolean(IS_PICKED));
+                                        if(document.getDocument().getBoolean(IS_DELIVERED)!=null){
+                                        addPackage.setDelivered(document.getDocument().getBoolean(IS_DELIVERED));}
+                                        if(document.getDocument().getBoolean(IS_PICKED)!=null){
+                                        addPackage.setPicked(document.getDocument().getBoolean(IS_PICKED));}
                                         //Todo: add isPicked & is delivered flags
                                         myDataset.add(addPackage);
                                         myAdapter.notifyDataSetChanged();}
@@ -170,7 +172,18 @@ public class ShipmentActivity extends AppCompatActivity {
                                 case MODIFIED:
                                         Log.d(TAG, "Modified Package: " + document.getDocument().getData());
                                         //TODO : GET THE UPDATE FROM THE DATABASE
+                                    for (Package pack : myDataset) {
+                                        if (pack.getPackageID().equals(document.getDocument().getString(PACKAGE_ID))) {
+                                            int i = myDataset.indexOf(pack);
+                                            if(document.getDocument().getBoolean(IS_DELIVERED)!=null) {
+                                                myDataset.get(i).setDelivered(document.getDocument().getBoolean(IS_DELIVERED));
+                                            }
+                                            if(document.getDocument().getBoolean(IS_PICKED)!=null){
 
+                                                myDataset.get(i).setPicked(document.getDocument().getBoolean(IS_PICKED));}
+                                            //myAdapter.notifyDataSetChanged();
+                                        }
+                                    }
                                     myAdapter.notifyDataSetChanged();
                                     break;
                                 case REMOVED:

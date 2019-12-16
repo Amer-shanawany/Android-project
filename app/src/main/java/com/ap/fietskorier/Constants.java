@@ -23,6 +23,7 @@ public class Constants {
     public static final String DESTINATION_ADDRESS = "Destination Address";
     public static final String SOURCE_ADDRESS = "Source Address";
     public static final String IS_PICKED = "Is Picked";
+
     public static final String IS_DELIVERED = "Is Delivered";
 
     public static final String SOURCE_ID ="Source ID";
