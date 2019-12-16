@@ -145,12 +145,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this,"Login Error, Please login again", Toast.LENGTH_SHORT).show();
                                 }else{
                                     if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
-<<<<<<< HEAD
-=======
                                     Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
->>>>>>> 2e1df54f763a10699018d68c53ac9d78a7d9ee0a
 
-                                    Intent intToHome = new Intent(LoginActivity.this,ShipmentActivity.class);
 
                                         User user = new User(mFirebaseAuth.getUid(),"none",mFirebaseAuth.getCurrentUser().getEmail());
                                         ((UserClient)(getApplicationContext())).setUser(user);
