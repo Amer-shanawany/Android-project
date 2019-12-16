@@ -153,9 +153,10 @@ public class DeliveryActivity extends AppCompatActivity {
                                         if (pack.getPackageID().equals(document.getDocument().getString(PACKAGE_ID))) {
                                             int i = myDataset.indexOf(pack);
                                             myDataset.remove(i);
-                                            myAdapter.notifyDataSetChanged();
                                         }
                                     }
+                                    myAdapter.notifyDataSetChanged();
+
                                     break;
                             }
 
