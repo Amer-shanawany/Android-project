@@ -92,7 +92,7 @@ public class SearchPackage extends AppCompatActivity
 
 
         // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_search_package);
 //         Get the SupportMapFragment and request notification
 //         when the map is ready to be used.
          SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -128,10 +128,6 @@ public class SearchPackage extends AppCompatActivity
         mMap = googleMap;
         checkMapServices();
         Toast.makeText(this,"Map is ready ",Toast.LENGTH_SHORT).show();
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-
-        //Todo: here !  Get the data from Firebase and then draw the markers
 
         getDeviceLocation();
         getPackagesFirebase();
@@ -148,22 +144,9 @@ public class SearchPackage extends AppCompatActivity
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-//
-//            mGps.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d(TAG, "onClick: clicked gps icon");
-//                    getDeviceLocation();
-//                }
-//            });
-
             hideSoftKeyboard();
         }
 
-//        LatLng sydney = new LatLng(-33.852, 151.211);
-//        googleMap.addMarker(new MarkerOptions().position(sydney)
-//                .title("Marker   in Sydney"));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void getPackagesFirebase(){
@@ -238,19 +221,7 @@ public class SearchPackage extends AppCompatActivity
          extras.putString("EMAIL", myPackage.getEmailDestination());
          extras.putString("QR", myPackage.getPickupQR());
          extras.putString(OWNER_ID,myPackage.getUser_id());
-        /**
-         *
-         extras.putString("ID",myPackage.getPackageID());
-         extras.putString("SOURCE", myPackage.getOwnerAddress());
-         extras.putString("DESTINATION", myPackage.getDeliveryAddress());
-         extras.putString("EMAIL", myPackage.getEmailDestination());
-         extras.putString("QR", myPackage.getPickupQR());
-         *  String packageId = extras.getString("ID");
-         *         String packageSourceAddress = extras.getString("SOURCE");
-         *         String packageDestinationAddress = extras.getString("DESTINATION");
-         *         String packageDestinationEmail = extras.getString("EMAIL");
-         *         String packagePickupQRCode = extras.getString("QR");
-         * */
+
         i.putExtras(extras);
         startActivity(i);
         return false;
@@ -358,69 +329,8 @@ public class SearchPackage extends AppCompatActivity
     private void moveCamera(LatLng latLng, float zoom ){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-//        //add a marker
-//        if(!title.equals("My Location")){
-//                    options.position(latLng)
-//                    .title(title);
-//            mMap.addMarker(options);
-//        }
 
      }
-//
-//    private void buildAlertMessageNoGps() {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
-//                .setCancelable(false)
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-//                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
-//                    }
-//                });
-//        final AlertDialog alert = builder.create();
-//        alert.show();
-//    }
-
-//    public boolean isMapsEnabled(){
-//        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-//
-//        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-//            buildAlertMessageNoGps();
-//            return false;
-//        }
-//        return true;
-//    }
-
-
-//    public boolean checkMapServices(){
-//        if(isServicesOK()){
-//            if(isMapsEnabled()){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public boolean isServicesOK(){
-//        Log.d(TAG, "isServicesOK: checking google services version");
-//
-//        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(SearchPackage.this);
-//
-//        if(available == ConnectionResult.SUCCESS){
-//            //everything is fine and the user can make map requests
-//            Log.d(TAG, "isServicesOK: Google Play Services is working");
-//            return true;
-//        }
-//        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-//            //an error occurred but we can resolve it
-//            Log.d(TAG, "isServicesOK: an error occurred but we can fix it");
-//            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(SearchPackage.this, available, ERROR_DIALOG_REQUEST);
-//            dialog.show();
-//        }else{
-//            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
-//        }
-//        return false;
-//    }
 
     public void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");

@@ -27,7 +27,6 @@ public class PickupPackage extends AppCompatActivity {
         String packageDestinationAddress = extras.getString("DESTINATION");
         String packageDestinationEmail = extras.getString("EMAIL");
         String owner_ID = extras.getString(OWNER_ID);
-        //String packagePickupQRCode = extras.getString("QR");
 
         TextView packageIden = findViewById(R.id.packageID);
         TextView packageSource = findViewById(R.id.sourceAddress);

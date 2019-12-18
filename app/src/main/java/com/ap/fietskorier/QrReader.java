@@ -56,9 +56,6 @@ import static com.ap.fietskorier.Constants.PACKAGE_ID;
 import static com.ap.fietskorier.Constants.PERMISSIONS_REQUEST_ENABLE_CAMERA;
 import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
 
-/**
- * Created by akhil on 28-12-16.
- */
 
 public class QrReader extends Activity implements ZXingScannerView.ResultHandler {
 
@@ -77,7 +74,6 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        // Here, thisActivity is the current activity
 
         user = ((UserClient)(getApplicationContext())).getUser();
 
@@ -89,12 +85,8 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
                     new String[]{Manifest.permission.CAMERA},
                     PERMISSIONS_REQUEST_ENABLE_CAMERA);
 
-            // MY_PERMISSIONS_REQUEST_CAMERA is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
 
         } else {
-            // Permission has already been granted
         }
 
         Bundle extras = getIntent().getExtras();
@@ -154,8 +146,6 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
         else Alert("This is not valid code for package "+ packageID + ".");
 
 
-        // call the alert dialog
-        //Alert(X);
 
     }
 
@@ -178,19 +168,16 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // camera related task you need to do.
+
                 } else {
                     finish();
                 }
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request.
+
         }
     }
 
@@ -225,8 +212,6 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
             });
         }
 
-    //FireCloud reference
-    // Create a storage reference from our app
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
 
@@ -240,7 +225,6 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
 
         String DownloadURL = "";
         mountainsRef  = storageRef.child("QRdelivery/"+packageID+".jpg");
-        //qrGenerator(view,mDocRef.getId());
         String inputValue = packageID+user.getUser_id();
 
 
@@ -298,15 +282,9 @@ public class QrReader extends Activity implements ZXingScannerView.ResultHandler
                                     }
                                 });
 
-                               ////intent naar de geupdate lijst...
-                               //Intent intent = new Intent(add_package.this, ShipmentActivity.class);
-                               //startActivity(intent);
                             }
                         });
-                        //Log.d(TAG, "OK");
-                        //Log.d(TAG,taskSnapshot.getMetadata().getCustomMetadataKeys(""));
-                        //Log.d(TAG, link);
-                        //Log.d(TAG, mountainsRef.getDownloadUrl().toString());
+
                     }
                 });
                 Log.d(TAG, "GenerateQR: is successfull");

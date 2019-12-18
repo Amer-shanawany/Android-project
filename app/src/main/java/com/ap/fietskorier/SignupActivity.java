@@ -85,12 +85,7 @@ public class SignupActivity extends AppCompatActivity {
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
                                 sendEmailVerification();
-                                Intent i = new Intent(SignupActivity.this,HomeActivity.class);
-                                if (mLocationPermissionGranted) {
-                                    startActivity(i);
-                                }else{
-                                    //Toast.makeText(MainActivity.this,"Please enable your GPS first",Toast.LENGTH_LONG).show();
-                                }
+
                             }
                         }
                     });
@@ -134,10 +129,10 @@ public class SignupActivity extends AppCompatActivity {
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // [END_EXCLUDE]
+
                     }
                 });
-        // [END send_email_verification]
+
     }
 
     public  boolean isServicesOk(){
@@ -198,16 +193,12 @@ private void init(){
     }
 
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
+
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
-           // getChatrooms();
+
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -259,7 +250,7 @@ private void init(){
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if(mLocationPermissionGranted){
-                   // getChatrooms();
+
                 }
                 else{
                     getLocationPermission();

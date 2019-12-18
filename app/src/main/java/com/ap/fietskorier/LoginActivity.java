@@ -174,7 +174,6 @@ public class LoginActivity extends AppCompatActivity {
                                         dataToSave.put("Last Login", FieldValue.serverTimestamp());
 
                                         mDocRef.set(dataToSave);
-                                        //Todo: Change this to shipmentActivity
 
                                         saveData();
 

@@ -55,7 +55,6 @@ public class DeliveryActivity extends AppCompatActivity {
     private User user;
     private FirebaseFirestore db;
 
-    //Button BtnToDeliverPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +62,6 @@ public class DeliveryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_delivery);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //BtnToDeliverPackage = findViewById(R.id.DeliverPackage);
 
         //make an instance of this user
         user = ((UserClient)(getApplicationContext())).getUser();
@@ -85,13 +82,7 @@ public class DeliveryActivity extends AppCompatActivity {
         setupRecyclerView();
 
 
-        /*BtnToDeliverPackage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentToDeliverPackage = new Intent(DeliveryActivity.this,DeliverPackage.class);
-                startActivity(intentToDeliverPackage);
-            }
-        });*/
+
 
     }
 

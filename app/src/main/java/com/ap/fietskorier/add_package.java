@@ -170,23 +170,14 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         save_info_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: clicking save package information button updates the same document
-                //TODO: so it's better to have two buttons, update info and save
-                // Todo: or to add a function for the current button that will takes the
-                //todo  the user back
-                //todo : or use a dialog inflater to ask for conformation when placing a package
-                // i prefer the lase option
+
                 AlertSavePackage(v);
-                //Done !
-                //saveFirestore(v);
+
             }
         });
 
 
-        /**
-         * Initialize Places. For simplicity, the API key is hard-coded. In a production
-         * environment we recommend using a secure mechanism to manage API keys.
-         */
+
 
         //TODO:Replace the API Key with a string value !!!
         if (!Places.isInitialized()) {
@@ -246,20 +237,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                         .position(destination_Place.getLatLng()));
                 destinationMarker.showInfoWindow();
                 calculateDistance();
-//                if(source_Place!=null){
-//                    if(polyline!=null){
-//                    polyline.remove();}
-//                    polyline = mMap.addPolyline(new PolylineOptions()
-//                            .clickable(false)
-//                            .add(source_Place.getLatLng(),destination_Place.getLatLng())
-//                    );
-//
-//                    //Get directiont
-//                    calculateDirections(source_Place,destination_Place);
-//                    //TODO: Add distance calculation (distance in Meters)
-//                    priceTextView.setText("Price : "+ (distance  / 10)+"$");
-//                }
-
 
             }
 
@@ -269,36 +246,10 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-//        if (source_Place!=null){
-//            moveCamera(source_Place.getLatLng(),DEFAULT_ZOOM,"Source ",sourceMarker);}
-//        if(destination_Place!=null) {
-//            moveCamera(destination_Place.getLatLng(), DEFAULT_ZOOM, "Destination ",destinationMarker);
-//        }
+
 
      }
 
-
-//
-//    private void init(){
-//        Log.d(TAG, "init: initializing");
-//
-//        source.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if(actionId == EditorInfo.IME_ACTION_SEARCH
-//                || actionId == EditorInfo.IME_ACTION_DONE
-//                || event.getAction() == KeyEvent.ACTION_DOWN
-//                || event.getAction() == KeyEvent.KEYCODE_ENTER){
-//                    //excute sarching methods
-//                    geoLocate();
-//
-//                }
-//
-//                return false;
-//            }
-//        });
-//
-//    }
 
     private void calculateDistance(){
         if(destination_Place!=null&&source_Place!=null){
@@ -378,12 +329,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
     private void moveCamera(LatLng latLng, float zoom ){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-//        //add a marker
-//        if(!title.equals("My Location")){
-//                    options.position(latLng)
-//                    .title(title);
-//            mMap.addMarker(options);
-//        }
 
         hideSoftKeyboard();
     }
@@ -420,22 +365,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             dataToSave.put(IS_DELIVERED,false);
             dataToSave.put(IS_PICKED,false);
             GenerateQR();
-
-            //dataToSave.put(PICKUP_QR_URL, uri);
-
-            //dataToSave.put(DESTINATION_GEO,geoDestination);
-
-            //int price, User sourceUser,
-            // String packageID, String addressSource,
-            // String addressDestination, String destinationEmail
-            //
-//            Package temp  =new Package(
-//                    price,
-//                    user,
-//                    mDocRef.getId(),
-//                    source_Place.getAddress(),
-//                    destination_Place.getAddress(),
-//                    destination_Email.getText().toString());
 
             mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -552,17 +481,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             hideSoftKeyboard();
         }
 
-
-
-        // Add polylines and polygons to the map. This section shows just
-        // a single polyline. Read the rest of the tutorial to learn more.
-
-
-        // Position the map's camera near Alice Springs in the center of Australia,
-        // and set the zoom factor so most of Australia shows on the screen.
-       // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-23.684, 133.903), 4));
-
-
     }
 
 
@@ -617,77 +535,12 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
 
                         saveFirestore(v);
 
-                        /*Intent intent = new Intent(add_package.this, ShipmentActivity.class);
-                        startActivity(intent);*/
                     }
                 })
         .setNegativeButton("Cancel",null);
         final AlertDialog alert = builder.create();
         alert.show();
     }
-
-
-
-    //Qr Generator
-
-
-//
-//    public void qrGenerator(View v){
-//        try {
-//            //setting size of qr code
-//            WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-//            Display display = manager.getDefaultDisplay();
-//            Point point = new Point();
-//            display.getSize(point);
-//            int width = point.x;
-//            int height = point.y;
-//            int smallestDimension = width < height ? width : height;
-//
-//            //EditText qrInput = (EditText) findViewById(R.id.qrInput);
-//            //String qrCodeData = qrInput.getText().toString();
-//
-//            //setting parameters for qr code
-//            String charset = "UTF-8"; // or "ISO-8859-1"
-//            Map<EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<>();
-//            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-//                //The first value is the encoded String
-//            createQRCode(mDocRef.getId(), charset, hintMap, smallestDimension, smallestDimension);
-//
-//        } catch (Exception ex) {
-//            Log.e("QrGenerate",ex.getMessage());
-//        }
-//    }
-//
-//    public Bitmap createQRCode(String qrCodeData,String charset, Map hintMap, int qrCodeheight, int qrCodewidth){
-//
-//        try {
-//            //generating qr code in bitmatrix type
-//            BitMatrix matrix = new MultiFormatWriter().encode(new String(qrCodeData.getBytes(charset), charset), BarcodeFormat.QR_CODE, qrCodewidth, qrCodeheight, hintMap);
-//            //converting bitmatrix to bitmap
-//            int width = matrix.getWidth();
-//            int height = matrix.getHeight();
-//            int[] pixels = new int[width * height];
-//            // All are 0, or black, by default
-//            for (int y = 0; y < height; y++) {
-//                int offset = y * width;
-//                for (int x = 0; x < width; x++) {
-//                    pixels[offset + x] = matrix.get(x, y) ? BLACK : WHITE;
-//                }
-//            }
-//
-//              bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//            bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-//            return  bitmap;
-//            //setting bitmap to image view
-//            //ImageView myImage = (ImageView) findViewById(R.id.imageView1);
-//            //myImage.setImageBitmap(bitmap);
-//        }catch (Exception er){
-//            Log.e("QrGenerate",er.getMessage());
-//            return null;
-//        }
-//    }
-
-
 
     //FireCloud reference
     // Create a storage reference from our app
@@ -772,10 +625,6 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
                                 startActivity(intent);
                             }
                         });
-                        //Log.d(TAG, "OK");
-                        //Log.d(TAG,taskSnapshot.getMetadata().getCustomMetadataKeys(""));
-                        //Log.d(TAG, link);
-                        //Log.d(TAG, mountainsRef.getDownloadUrl().toString());
                     }
                 });
                 Log.d(TAG, "GenerateQR: is successfull");
@@ -793,11 +642,7 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
             File file = new File(path,"this.jpg");
 
         try {
-            // Very simple code to copy a picture from the application's
-            // resource into the external file.  Note that this code does
-            // no error checking, and assumes the picture is small (does not
-            // try to copy it in chunks).  Note that if external storage is
-            // not currently mounted this will silently fail.
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
             byte[] bitmapdata = bos.toByteArray();
@@ -830,34 +675,5 @@ public class add_package extends AppCompatActivity  implements OnMapReadyCallbac
         }
 
 
-//        try {
-//            File file = new File(getExternalFilesDir(null),"Qr.jpg");
-//            QRGSaver.save(getExternalFilesDir(bitmap).toString());
-//
-//            save = QRGSaver.save(savePath, "QR", bitmap, QRGContents.ImageType.IMAGE_JPEG);
-//            result = save ? "Image Saved" : "Image Not Saved";//result alway false
-//            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
     }
-//
-//    public Bitmap QRGen(String inputValue){
-//        // Initializing the QR Encoder with your value to be encoded, type you required and Dimension
-//        QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, 400);
-//        try {
-//            // Getting QR-Code as Bitmap
-//            bitmap = qrgEncoder.encodeAsBitmap();
-//            // Setting Bitmap to ImageView
-//            //qrImage.setImageBitmap(bitmap);
-//            // Save with location, value, bitmap returned and type of Image(JPG/PNG).
-//            QRGSaver.save(savePath,mDocRef.getId() , bitmap, QRGContents.ImageType.IMAGE_JPEG);
-//            Toast.makeText(this, "A QR image is saved to: "+savePath, Toast.LENGTH_SHORT).show();
-//        } catch (WriterException e) {
-//            Log.v(TAG, e.toString());
-//        }
-//
-//        return bitmap;
-//    }
 }

@@ -56,7 +56,6 @@ public class ShipmentActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
-    //!!!
     private LinkedList<Package> packageList;
     private  FirebaseAuth mFirebaseAuth;
     private User user;
@@ -78,8 +77,7 @@ public class ShipmentActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+
                 Intent i = new Intent(ShipmentActivity.this,add_package.class);
 
                 startActivity(i);
@@ -90,48 +88,9 @@ public class ShipmentActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
 
-        //Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
-        //myDataset.add(package3);
 
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
-//        packages.whereEqualTo("Owner ID",user.getUser_id())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//
-//                        if (task.isSuccessful()){
-//                            for(QueryDocumentSnapshot document:task.getResult()){
-//
-//                                //String temp = document.getDouble("Price").toString();
-//                                //Log.d(TAG, user.toString());
-////                                Log.d(TAG, document.getString(SOURCE_ADDRESS));
-////                                Log.d(TAG, document.getString(DESTINATION_ADDRESS));
-////                                Log.d(TAG, document.getString(DESTINATION_EMAIL));
-////                                Log.d(TAG, document.getDouble(PRICE).toString());
-//
-//                                //User user, String addressSource, String addressDestination, String emailDestination, double price
-//                                 if(document.getDouble(PRICE)!=null){
-//                                Package tempPackage = new Package(user,
-//                                        document.getString(SOURCE_ADDRESS),
-//                                        document.getString(DESTINATION_ADDRESS),
-//                                        document.getString(DESTINATION_EMAIL),
-//                                        document.getDouble(PRICE)
-//                                );
-//                                 tempPackage.setPackageID(document.getString(PACKAGE_ID));
-//                                tempPackage.setEmailDestination(document.getString(DESTINATION_EMAIL));
-//                                tempPackage.setDeliveryAddress(document.getString(DESTINATION_ADDRESS));
-//                                tempPackage.setOwnerAddress(document.getString(SOURCE_ADDRESS));
-//                                myDataset.add(tempPackage);}
-//                                myAdapter.notifyDataSetChanged();
-//                                                            }
-//                        }else{
-//                            Log.w(TAG, "Error getting documents.",task.getException() );
-//                        }
-//                    }
-//
-//
-//                });
+
 
         packages.whereEqualTo("Owner ID",user.getUser_id())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
