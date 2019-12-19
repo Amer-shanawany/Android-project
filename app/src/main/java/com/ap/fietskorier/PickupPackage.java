@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import static com.ap.fietskorier.Constants.OWNER_ID;
+
 public class PickupPackage extends AppCompatActivity {
 
     public static final String EXTRA_PICKUPCODE = "com.ap.fietskoerier.extra.PICKUPCODE";
@@ -24,7 +26,7 @@ public class PickupPackage extends AppCompatActivity {
         String packageSourceAddress = extras.getString("SOURCE");
         String packageDestinationAddress = extras.getString("DESTINATION");
         String packageDestinationEmail = extras.getString("EMAIL");
-        //String packagePickupQRCode = extras.getString("QR");
+        String owner_ID = extras.getString(OWNER_ID);
 
         TextView packageIden = findViewById(R.id.packageID);
         TextView packageSource = findViewById(R.id.sourceAddress);
@@ -44,9 +46,9 @@ public class PickupPackage extends AppCompatActivity {
                 Bundle extras = new Bundle();
                 Intent pickupIntent = new Intent(PickupPackage.this, QrReader.class);
                 //TODO hier de goede variabelen zetten
-                extras.putString("PACKAGEID", "0O2oM4npunA4tRhYDIvI");
-                extras.putString("PICKUPCODE", "0O2oM4npunA4tRhYDIv");
-                extras.putString("DELIVERYCODE", "#@&"); //zo laten staan!!!
+                extras.putString("PACKAGEID", packageId);
+                extras.putString("PICKUPCODE", packageId+owner_ID);
+                 extras.putString("DELIVERYCODE", "#@&"); //zo laten staan!!!
                 pickupIntent.putExtras(extras);
                 startActivity(pickupIntent);
 

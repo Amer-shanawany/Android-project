@@ -98,6 +98,7 @@ public class MyProfileActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                email = newEmail;
                                 if (task.isSuccessful()) {
                                     //Log.d(TAG, "User email address updated.");
                                 }

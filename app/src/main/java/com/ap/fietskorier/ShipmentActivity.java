@@ -36,13 +36,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.ap.fietskorier.Constants.DESTINATION_ADDRESS;
 import static com.ap.fietskorier.Constants.DESTINATION_EMAIL;
+import static com.ap.fietskorier.Constants.IS_DELIVERED;
+import static com.ap.fietskorier.Constants.IS_PICKED;
 import static com.ap.fietskorier.Constants.PACKAGES_COLLECTIONS;
 import static com.ap.fietskorier.Constants.PACKAGE_ID;
+import static com.ap.fietskorier.Constants.PICKUP_QR_URL;
 import static com.ap.fietskorier.Constants.PRICE;
-import static com.ap.fietskorier.add_package.DESTINATION_ADDRESS;
-import static com.ap.fietskorier.add_package.PICKUP_QR_URL;
-import static com.ap.fietskorier.add_package.SOURCE_ADDRESS;
+import static com.ap.fietskorier.Constants.SOURCE_ADDRESS;
+
 
 public class ShipmentActivity extends AppCompatActivity {
 
@@ -53,7 +56,6 @@ public class ShipmentActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
-    //!!!
     private LinkedList<Package> packageList;
     private  FirebaseAuth mFirebaseAuth;
     private User user;
@@ -75,8 +77,7 @@ public class ShipmentActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+
                 Intent i = new Intent(ShipmentActivity.this,add_package.class);
 
                 startActivity(i);
@@ -87,48 +88,9 @@ public class ShipmentActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
 
-        //Package package3 = new Package(null,"sourceAddress 3","Destination Address 3", "email3@receiver.com",32.3);
-        //myDataset.add(package3);
 
         CollectionReference packages = db.collection(PACKAGES_COLLECTIONS);
-//        packages.whereEqualTo("Owner ID",user.getUser_id())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//
-//                        if (task.isSuccessful()){
-//                            for(QueryDocumentSnapshot document:task.getResult()){
-//
-//                                //String temp = document.getDouble("Price").toString();
-//                                //Log.d(TAG, user.toString());
-////                                Log.d(TAG, document.getString(SOURCE_ADDRESS));
-////                                Log.d(TAG, document.getString(DESTINATION_ADDRESS));
-////                                Log.d(TAG, document.getString(DESTINATION_EMAIL));
-////                                Log.d(TAG, document.getDouble(PRICE).toString());
-//
-//                                //User user, String addressSource, String addressDestination, String emailDestination, double price
-//                                 if(document.getDouble(PRICE)!=null){
-//                                Package tempPackage = new Package(user,
-//                                        document.getString(SOURCE_ADDRESS),
-//                                        document.getString(DESTINATION_ADDRESS),
-//                                        document.getString(DESTINATION_EMAIL),
-//                                        document.getDouble(PRICE)
-//                                );
-//                                 tempPackage.setPackageID(document.getString(PACKAGE_ID));
-//                                tempPackage.setEmailDestination(document.getString(DESTINATION_EMAIL));
-//                                tempPackage.setDeliveryAddress(document.getString(DESTINATION_ADDRESS));
-//                                tempPackage.setOwnerAddress(document.getString(SOURCE_ADDRESS));
-//                                myDataset.add(tempPackage);}
-//                                myAdapter.notifyDataSetChanged();
-//                                                            }
-//                        }else{
-//                            Log.w(TAG, "Error getting documents.",task.getException() );
-//                        }
-//                    }
-//
-//
-//                });
+
 
         packages.whereEqualTo("Owner ID",user.getUser_id())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -157,14 +119,31 @@ public class ShipmentActivity extends AppCompatActivity {
                                         addPackage.setDeliveryAddress(document.getDocument().getString(DESTINATION_ADDRESS));
                                         addPackage.setOwnerAddress(document.getDocument().getString(SOURCE_ADDRESS));
                                         addPackage.setPickupQR(document.getDocument().getString(PICKUP_QR_URL));
+                                        if(document.getDocument().getBoolean(IS_DELIVERED)!=null){
+                                        addPackage.setDelivered(document.getDocument().getBoolean(IS_DELIVERED));}
+                                        if(document.getDocument().getBoolean(IS_PICKED)!=null){
+                                        addPackage.setPicked(document.getDocument().getBoolean(IS_PICKED));}
+                                        //Todo: add isPicked & is delivered flags
                                         myDataset.add(addPackage);
                                         myAdapter.notifyDataSetChanged();}
 
                                     break;
                                 case MODIFIED:
                                         Log.d(TAG, "Modified Package: " + document.getDocument().getData());
+                                        //TODO : GET THE UPDATE FROM THE DATABASE
+                                    for (Package pack : myDataset) {
+                                        if (pack.getPackageID().equals(document.getDocument().getString(PACKAGE_ID))) {
+                                            int i = myDataset.indexOf(pack);
+                                            if(document.getDocument().getBoolean(IS_DELIVERED)!=null) {
+                                                myDataset.get(i).setDelivered(document.getDocument().getBoolean(IS_DELIVERED));
+                                            }
+                                            if(document.getDocument().getBoolean(IS_PICKED)!=null){
 
-
+                                                myDataset.get(i).setPicked(document.getDocument().getBoolean(IS_PICKED));}
+                                            //myAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                    myAdapter.notifyDataSetChanged();
                                     break;
                                 case REMOVED:
                                     Log.d(TAG, "Removed Package: " + document.getDocument().getData());
@@ -173,9 +152,10 @@ public class ShipmentActivity extends AppCompatActivity {
                                         if (pack.getPackageID().equals(document.getDocument().getString(PACKAGE_ID))) {
                                             int i = myDataset.indexOf(pack);
                                             myDataset.remove(i);
-                                            myAdapter.notifyDataSetChanged();
                                         }
                                     }
+                                    myAdapter.notifyDataSetChanged();
+
                                     break;
                             }
                         }
